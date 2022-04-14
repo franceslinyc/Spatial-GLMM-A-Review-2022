@@ -61,7 +61,7 @@ The sum term $\sum_{(i,j) \in E} Z^*_j$ is called the autocovariate, and it is c
 
 ### The RHS model 
 
-The traditional SGLMM can also shown to be confounded. More specifically, introduction of the random effects can inflate the variance of the posterior distribution of $\beta$. This is because the traditional model contains predictors that are collinear with $X$, and this linearity causes the variance inflation (Reich et al., 2006). 
+The traditional SGLMM can also shown to be confounded. More specifically, introduction of the random effects can inflate the variance of the posterior distribution of $\beta$. This is because the traditional model contains predictors that are collinear with $X$, and this collinearity causes the variance inflation (Reich et al., 2006). 
 
 Consider $P$ be a projection onto $C(X)$
 
@@ -88,12 +88,13 @@ p(\delta|\tau) \propto \tau^{(n-p)/2} exp(- \frac{\tau} {2} \delta^T Q_R \delta)
 $$
 where $Q_R = L^T Q L$. 
 
-The traditional SGLMM and RHZ model both share very similar approach to that of the automodel. The traditional SGLMM model makes use of synthetic predictors $K$ and $L$, and the RHZ model makes use of $L$. The traditional SGLMM is analogous to the uncentred automodel, and the RHZ model is analogous to the centred automodel. Both the traditional SGLMM and uncentred automodel introduce predictors $K$ and the uncentred autocovariate, respectively, that lead to spatial confounding. Both the RHZ model and centred model are designed to fit only residual structure of the data. 
+The traditional SGLMM and RHZ model both share very similar approach to that of the automodel. The traditional SGLMM model makes use of synthetic predictors $K$ and $L$, and the RHZ model makes use of $L$. 
 
+The traditional SGLMM is analogous to the uncentred automodel since both models include predictors $K$ and the uncentred autocovariate, respectively, that lead to spatial confounding. The RHZ model is analogous to the centred automodel since both models are designed to fit only residual structure of the data. 
 
 ## 4. Sparse reparameterization of the areal SGLMM
 
-The RHZ model does not allow parsimonious fitting of the residual clustering. The model permits structure of negative spatial dependence (i.e. repulsion) in the random effects because the geometry corresponding to the projection $P^{\bot}$ does not account for the underlying graph $G$. The reparameterized model considers an alternative projection that captures the geometry of the models. Utilizing this geometry also leads to dimension reduction of the random effects naturally. 
+The RHZ model does not allow parsimonious fitting of the residual clustering. Because the geometry corresponding to the projection $P^{\bot}$ fails to account for the underlying graph $G$, the RHZ model permits structure of negative spatial dependence (i.e. repulsion) in the random effects. However, neighboring observation tends to be similar, rather than dissimilar, in practice. The proposed reparameterized model considers an alternative projection that captures the geometry of the models, thus allowing patterns of positive spatial dependence (i.e. attraction). Utilizing the geometry of the models also leads to dimension reduction of the random effects naturally. 
 
 ### The reparameterized model
 
@@ -104,7 +105,7 @@ The random effects for the reparameterized model i) allow patterns of positive s
 
 
 
-Assume $M$ a matrix that contains the first $q \ll n$ eigenvectors of the Moran operator and further assume positive spatial dependence $\lambda_q > 0$ since it is more realistic to assume that neighboring observation tends to be similar, rather than dissimilar, in practice. 
+Assume $M$ a matrix that contains the first $q \ll n$ eigenvectors of the Moran operator and further assume positive spatial dependence $\lambda_q > 0$. 
 
 Replacing $L$ with $M$ in the RHS model, the first stage of the reparameterized model is given by 
 
@@ -119,7 +120,9 @@ p(\delta_S|\tau) \propto \tau^{q/2} exp(- \frac{\tau} {2} \delta_S^T Q_S \delta_
 $$
 where $Q_S = M^T Q M$. 
 
+The sparse reparameterized SGLMM model is more closely analogous to the centred automodel than it is to the RHZ model. Both the sparse SGLMM model and centred automodel account for $X$ and the underlying graph. 
 
+On the other hand, the RHZ model accounts for $X$ but does not account for the underlying graph. The uncentred automodel does not fit residual structure to $X$ but does account for the underlying graph by including (uncentred) autocovariate that sums the neighbors. 
 
 
 ## 5. Dimension reduction for spatial models
