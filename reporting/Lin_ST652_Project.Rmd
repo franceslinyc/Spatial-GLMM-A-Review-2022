@@ -1,5 +1,5 @@
 ---
-title: "SGLMM (Spatial Generalized Linear Mixed Model): A Review"
+title: "Reparameterized SGLMM (Spatial Generalized Linear Mixed Model): A Review"
 author: "Frances Lin"
 date: "June 2022"
 output: pdf_document
@@ -8,7 +8,7 @@ header-includes: \usepackage{setspace}\onehalfspacing
 
 ## 1. Introduction 
 
-The SGLMM (spatial generalized linear mixed model) is a hierarchical model that introduces spatial dependence through a GMRF (Gaussian Markov random field) (Besag et al., 1991). The SGLMM was initially proposed for prediction for count data. Later, it has been applied to estimation and prediction for other types of data (e.g. binary) and found applications in many fields (e.g. ecology, geology, and forestry). 
+The SGLMM (spatial generalized linear mixed model) is a hierarchical model that introduces spatial dependence through a GMRF (Gaussian Markov random field) (Besag et al., 1991). Although the SGLMM was initially proposed for prediction for count data, it has later been applied to estimation and prediction for other types of data (e.g. binary) and found applications in many fields (e.g. ecology, geology, and forestry). 
 
 The SGLMM has been the dominant model for areal data because of its flexible hierarchical specification, the availability of the software `WinBUGS` for data analysis (Lunn et al., 2000) and various theoretical and computational advantages over the competitive model named automodel. However, SGLMMs suffer from two major shortcomings: i) variance inflation due to spatial confounding and ii) computational challenges posed by high dimensional latent variables (random effects). On the other hand, while a new model named RHS model seeks to alleviate confounding by introducing synthetic predictors that are orthogonal to the fixed-effects predictors (Reich et al., 2006), failing to account for the underlying graph, the RHS model can result in random-effects structure with negative spatial dependence (i.e. repulsion) that is not typically applied in practice. 
 
@@ -138,5 +138,5 @@ On the other hand, the RHZ model accounts for $X$ but does not account for the u
 
 [Haran, M. (2011). Gaussian random field models for spatial data. Handbook of Markov Chain Monte Carlo, 449-478.](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.210.4099&rep=rep1&type=pdf)
 
-Rue, H., Riebler, A., Sørbye, S. H., Illian, J. B., Simpson, D. P., & Lindgren, F. K. (2017). Bayesian computing with INLA: a review. Annual Review of Statistics and Its Application, 4, 395-421.
+**Hughes, J., & Haran, M. (2013). Dimension reduction and alleviation of confounding for spatial generalized linear mixed models. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 75(1), 139-159.**
 
