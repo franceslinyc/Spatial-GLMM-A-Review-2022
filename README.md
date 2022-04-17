@@ -11,7 +11,7 @@ Review a paper about a reparameterized SGLMM (Spatial Generalized Linear Mixed M
 
 Documentation:
 
-Report can be found [here](https://github.com/franceslinyc/Spatial-GLMM-A-Review-2022/blob/main/reporting/Lin_ST652_Project.pdf). Presentation slides can be found here.
+Report can be found [here](https://github.com/franceslinyc/Spatial-GLMM-A-Review-2022/blob/main/reporting/Lin_ST652_Project.pdf). Presentation slides can be found [here]().
 
 Reference: 
 
