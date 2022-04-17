@@ -8,11 +8,11 @@ header-includes: \usepackage{setspace}\onehalfspacing
 
 ## 1. Introduction 
 
-The SGLMM (spatial generalized linear mixed model) is a hierarchical model that introduces spatial dependence through a GMRF (Gaussian Markov random field) (Besag et al., 1991). Although the SGLMM was initially proposed for prediction for count data, it has later been applied to estimation and prediction for other types of data (e.g. binary) and found applications in many fields (e.g. ecology, geology, and forestry). 
+The SGLMM (spatial generalized linear mixed model) is a hierarchical model that introduces spatial dependence through a GMRF (Gaussian Markov random field) (Besag et al., 1991). Although the SGLMM was initially proposed for prediction for count data, it has later been applied to estimation and prediction for other types of data (e.g. binary) and found applications in many fields (e.g. ecology, geology, epidemiology, image analysis, and forestry). 
 
 The SGLMM has been the dominant model for areal data because of its flexible hierarchical specification, the availability of the software `WinBUGS` for data analysis (Lunn et al., 2000) and various theoretical and computational advantages over the competitive model named automodel. However, SGLMMs suffer from two major shortcomings: i) variance inflation due to spatial confounding and ii) computational challenges posed by high dimensional latent variables (random effects). On the other hand, while a new model named RHS model seeks to alleviate confounding by introducing synthetic predictors that are orthogonal to the fixed-effects predictors (Reich et al., 2006), failing to account for the underlying graph, the RHS model can result in random-effects structure with negative spatial dependence (i.e. repulsion) that is not typically applied in practice. 
 
-A new model that is able to alleviate confounding, and, at the same time, include patterns of positive spatial dependence (i.e. attraction) and exclude patterns of repulsion is proposed. While other dimension reduction methods have been proposed (Higdon, 2002; Cressie & Johannesson, 2008; Banerjee et al., 2008; Furrer et al., 2006; Rue & Tjelmeland, 2002), these methods focus on spatial point-referenced models. The proposed model is one of the first dimension reduction techniques for spatial areal models. 
+A reparameterized model that is able to alleviate confounding, and, at the same time, include patterns of positive spatial dependence (i.e. attraction) while excluding patterns of repulsion is proposed. While other dimension reduction methods have been proposed (Higdon, 2002; Cressie & Johannesson, 2008; Banerjee et al., 2008; Furrer et al., 2006; Rue & Tjelmeland, 2002), these methods focus on spatial point-referenced models. The proposed model is one of the first dimension reduction techniques for spatial areal models. 
 
 
 ## 2. Traditional SGLMM (Spatial Generalized Linear Mixed Model) 
@@ -50,7 +50,7 @@ For spatial data over a continuous domain, i.e. point-referenced data or geostat
 
 ### The automodel 
 
-Recall that SGLMM's closest competitor the automodel, a Markov random-field model that incorporates dependence directly, is given as 
+The automodel, SGLMM's closest competitor, is a Markov random-field model that incorporates dependence directly and is defined as 
 
 $$
 g({E(Z_i | \beta, \eta, Z_{-i})}) = X_i \beta + \eta \sum_{(i,j) \in E} Z^*_j, \ \ \ \ \ \ \ \ \ \ (3)
@@ -98,14 +98,14 @@ The RHZ model does not allow parsimonious fitting of the residual clustering. Be
 
 ### The reparameterized model
 
-The random effects for the reparameterized model i) allow patterns of positive spatial dependence (i.e. attraction) and exclude patterns of repulsion and ii) have dimension much smaller than $n$. 
+The random effects for the reparameterized model i) allow patterns of positive spatial dependence (i.e. attraction) while excluding patterns of repulsion and ii) have dimension much smaller than $n$. 
 
 ......
 
 
 
 
-Assume $M$ a matrix that contains the first $q \ll n$ eigenvectors of the Moran operator and further assume positive spatial dependence $\lambda_q > 0$. 
+Assume $M$ to be a matrix that contains the first $q \ll n$ eigenvectors of the Moran operator and further assume positive spatial dependence $\lambda_q > 0$. 
 
 Replacing $L$ with $M$ in the RHS model, the first stage of the reparameterized model is given by 
 
