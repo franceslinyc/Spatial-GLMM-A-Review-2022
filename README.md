@@ -7,7 +7,7 @@ Frances Lin
 
 Description:
 
-Review a paper about a reparameterized SGLMM (Spatial Generalized Linear Mixed Model): introduction, review (SGLMM through undirected graphs, automodel, RHS model), and.
+Review a paper about a sparse, reparameterized SGLMM (Spatial Generalized Linear Mixed Model): introduction, review (SGLMM through undirected graphs, GMRFs, automodel, RHS model), and.
 
 Documentation:
 
