@@ -37,19 +37,19 @@ ii) computational challenges posed by high dimensional latent variables (random 
 
 ## Background and Introduction
 
-On the other hand, while a new model named RHS model 
+On the other hand, while another model named RHS model 
 
 - seeks to alleviate confounding (Reich et al., 2006), 
 
 - can result in random-effects structure with negative spatial dependence (i.e. repulsion) that is not typically applied in practice. 
 
-A reparameterized  model that is able to 
+A reparameterized model that is able to 
 
 - alleviate confounding, and, at the same time, 
 
-- include patterns of positive spatial dependence (i.e. attraction) while excluding patterns of repulsion is proposed. 
+- include patterns of positive spatial dependence (i.e. attraction) while excluding patterns of repulsion 
 
-The proposed model is also one of the first dimension reduction techniques for spatial areal models. 
+is proposed. The proposed model is also one of the first dimension reduction techniques for spatial areal models. 
 
 
 ## Outline 
@@ -59,6 +59,8 @@ The proposed model is also one of the first dimension reduction techniques for s
 - Spatial confounding 
 
 - Sparse reparameterization of the areal SGLMM
+
+-
 
 
 ## Traditional SGLMM
