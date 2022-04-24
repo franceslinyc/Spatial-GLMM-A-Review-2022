@@ -32,7 +32,7 @@ However, SGLMMs suffer from two major shortcomings:
 
 i) variance inflation due to spatial confounding and 
 
-ii) computational challenges posed by high dimensional latent variables (random effects). 
+ii) computational challenges posed by high dimensional latent variables ("random effects"). 
 
 
 ## Background and Introduction
@@ -56,11 +56,31 @@ The proposed model is also one of the first dimension reduction techniques for s
 
 - Traditional SGLMM (Spatial Generalized Linear Mixed Model) 
 
-- Spatial confounding 
+- Spatial confounding (via the automodel)
+
+- RHZ model 
 
 - Sparse reparameterization of the areal SGLMM
 
 -
+
+## Comparision of various SGLMMs
+
+```{r, echo = FALSE, error = FALSE, message = FALSE}
+library(tidyverse)
+library(pander)
+```
+
+```{r, echo = FALSE, error = FALSE}
+tb_1 <- tibble(
+  Model = c("Traditional SGLMM", "Uncentred automodel", 
+            "Centred automodel", "RHZ SGLMM", "Sparse SGLMM"),
+  Confounded = c("Yes", "Yes", "No", "No", "No"), 
+  Account_G = c("No", "Yes", "Yes", "No", "Yes")
+)
+
+tb_1 %>% pandoc.table(caption = "Comparision of various SGLMMs") %>% pander
+```
 
 
 ## Traditional SGLMM
@@ -73,7 +93,7 @@ be an undirected, labelled graph, where $V = \{1, 2,...,n \}$ is a set of vertic
 
 - Each vertex represents an area of interest and each edge represents the proximity of areas $i$ and $j$. 
 
-- $G$ is represented using an adjacency matrix $A$, which is a $nxn$ matrix with $diag(A) = 0$ and entries $A_{ij} = 1 \{ (i, j) \in E, i \neq j\},$ where $1 (\cdot)$ is an indicator function. 
+- The graph $G$ is represented using an adjacency matrix $A$, which is a $nxn$ matrix with $diag(A) = 0$ and entries $A_{ij} = 1 \{ (i, j) \in E, i \neq j\},$ where $1 (\cdot)$ is an indicator function (i.e. entry $a_{ij} = 1$ if vertex $v_i$ and $v_j$ are adjacent. $a_{ij} = 0$, otherwise).  
 
 
 ## Traditional SGLMM
@@ -97,20 +117,122 @@ Different types of data require different canonical choices of the link function
 
 ## GMRF prior for the random effects
 
-The field of random effects $W = {(W_1,...,W_n)}^{T}$, through which spatial dependence is incorporated, is assumed to follow the intrinsic conditionally autoregressive or GMRF prior
-
+The field of random effects $W = {(W_1,...,W_n)}^{T}$, through which spatial dependence is incorporated, is assumed to follow the intrinsic conditionally autoregressive or improper GMRF prior
 $$
 p(W|\tau) \propto \tau^{rank(Q)/2} exp(- \frac{\tau} {2} W^T Q W), \ \ \ \ \ \ \ \ (2)
 $$
-where $\tau$ is a smoothing parameter and $Q = diag(A1) - A$ is a precision matrix. The precision matrix $Q$ incorporates both dependence and prior uncertainty. 
+where $\tau$ is a smoothing ("precision") parameter and $Q = diag(A1) - A$ is a precision matrix. The precision matrix $Q$ incorporates both dependence and prior uncertainty. 
 
 Note. A SGLMM  
 
-1. can be reformatted by replacing GMRF with GP (Gaussian process) for point-referenced data or geostatistical data. 
+1. can be reformatted by replacing GMRF with GP (Gaussian process) for point-referenced data (or geostatistical) data. 
 
 2. is restricted to a Bayesian or restricted maximum likelihood (REML) analysis since the prior (2) is improper. 
 
 
-## Spatial confounding
+## Spatial confounding (via the automodel)
 
+The automodel, SGLMM's closest competitor, is a Markov random-field model that incorporates dependence directly and is defined as 
+$$
+g({E(Z_i | \beta, \eta, Z_{-i})}) = X_i \beta + \eta \sum_{(i,j) \in E} Z^*_j, \ \ \ \ \ \ \ \ \ \ (3)
+$$
+where 
+
+- $g$ is a (canonical) link function, 
+
+- $\eta$ is the dependence parameter ($\eta > 0$ implies attraction; $\eta < 0$ implies repulsion), and 
+
+- $Z_{-i}$ is the field excluding the $i$th observation.
+
+
+## Spatial confounding (via the automodel)
+
+- For the centred automodel, $Z^*_j = Z_j - \mu_j$, where $\mu_j$ is the independence expectation of $Z_j$ (i.e. $\mu_j = E(Z_j | \beta, \eta = 0) = g^{-1} (X_j \beta)$). 
+
+- For the uncentred automodel, $Z^*_j = Z_j$. 
+
+The sum term $\sum_{(i,j) \in E} Z^*_j$ is called the autocovariate, and it is considered as a synthetic predictor. 
+
+- The centred autocovariate makes the dependence parameter easily interpretable ($\eta$ captures the relativity of an observation to its neighbours, conditional on the hypothesized regression component). 
+
+- The uncentred autocovariate not only poses conceptual challenge but also shows spatial confounding. 
+
+
+## The RHS model 
+
+The traditional SGLMM can also shown to be confounded. 
+
+Consider $P$ be a projection onto $C(X)$ 
+$$
+P = X {(X^T X)}^{-1} X^T
+$$
+and let $P^{\bot}$ be the projection onto $C(X)$'s complement such that $P^{\bot} = I - P$, then equation (1) can be rewritten as 
+$$
+g({E(Z_i | \beta, W_i)}) = X_i \beta + K_i \gamma + L_i \delta, 
+$$
+where $K$ and $L$ are orthogonal bases for $C(X)$ and $C(X)^{\bot}$ respectively and $\gamma$ and $\delta$ are random coefficients. 
+
+$K$ and $X$ now share the same column space, and this is the source of the spatial confounding. 
+
+
+## The RHS model 
+
+Since $K$ has no practical meaning, setting $\gamma = 0$, the first stage of the RHS model is given by 
+$$
+g({E(Z_i | \beta, \delta)}) = X_i \beta + L_i \delta,
+$$
+and, compared to equation (2), the prior for the random effects $\delta$ becomes 
+$$
+p(\delta|\tau) \propto \tau^{(n-p)/2} exp(- \frac{\tau} {2} \delta^T Q_R \delta),
+$$
+where $Q_R = L^T Q L$. 
+
+
+## The sparse, reparameterized areal SGLMM
+
+However, the RHZ model does not allow parsimonious fitting of the residual clustering. 
+
+- The geometry corresponding to the projection $P^{\bot}$ fails to account for the underlying graph $G$, thus permitting structure of negative spatial dependence (i.e. repulsion) in the random effects. 
+
+- This is not useful in practice since neighboring observation tends to be similar, rather than dissimilar. 
+
+The proposed reparameterized model 
+
+i) considers an alternative projection that captures the geometry of the models, thus allowing *only* patterns of positive spatial dependence (i.e. attraction).
+
+ii) utilizes the geometry of the models, which leads to dimension reduction of the random effects naturally. 
+
+
+## The sparse, reparameterized areal SGLMM
+
+Consider the operator $(I - 11^T/n) A (I - 11^T/n)$ that appears in the numerator (top) of Moran's $I$-statistic (a commonly used for nonparametric method for spatial dependence) 
+$$
+I(A) = \frac{n} {1^TA1} \frac{Z^T (I - 11^T/n) A (I - 11^T/n) Z} {Z^T (I - 11^T/n) Z},
+$$
+where $I$ is a $nxn$ identity matrix and $1$ is a $n$-vector of $1$s.
+
+Next replace $I - 11^T/n$ with $P^{\bot}$, then the resulting operator called the Moran operator for $X$ with respect to $G$, $P^{\bot} A P^{\bot}$, appears in the numerator of the generalized Moran's $I$-statistic 
+$$
+I_x (A) = \frac{n} {1^TA1} \frac{Z^T P^{\bot} A P^{\bot} Z} {Z^T P^{\bot} Z}.
+$$
+
+
+## The sparse, reparameterized areal SGLMM
+
+
+
+## The sparse, reparameterized areal SGLMM
+
+Replace $L$ with $M$ in the RHS model, then the first stage of the reparameterized model is given by 
+$$
+g({E(Z_i | \beta, \delta_S)}) = X_i \beta + M_i \delta_S,
+$$
+and the prior for the random effects $\delta_S$ becomes 
+$$
+p(\delta_S|\tau) \propto \tau^{q/2} exp(- \frac{\tau} {2} \delta_S^T Q_S \delta_S),
+$$
+where $Q_S = M^T Q M$. 
+
+
+## Dimension reduction for spatial models
 
