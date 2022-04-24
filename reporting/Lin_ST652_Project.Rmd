@@ -37,7 +37,7 @@ where $g$ is a link function, $X_i$ is the $i$th row of the design matrix $X$, $
 
 ### GMRF prior for the random effects
 
-The field of random effects $W = {(W_1,...,W_n)}^{T}$, through which spatial dependence is incorporated, is assumed to follow an improper GMRF prior or the so-called intrinsic conditionally autoregressive (Besag & Kooperberg, 1995)
+The field of random effects $W = {(W_1,...,W_n)}^{T}$, through which spatial dependence is incorporated, is assumed to follow an improper GMRF prior or the so-called intrinsic conditionally autoregressive (Besag & Kooperberg, 1995) 
 $$
 p(W|\tau) \propto \tau^{rank(Q)/2} exp(- \frac{\tau} {2} W^T Q W), \ \ \ \ \ \ \ \ (2)
 $$
@@ -61,7 +61,7 @@ The sum term $\sum_{(i,j) \in E} Z^*_j$ is called the autocovariate, and it is c
 
 The traditional SGLMM can also shown to be confounded. More specifically, introduction of the random effects can inflate the variance of the posterior distribution of $\beta$. This is because the traditional model contains predictors that are collinear with $X$, and this collinearity causes the variance inflation (Reich et al., 2006). 
 
-Consider $P$ be a projection onto $C(X)$
+Consider $P$ be a projection onto $C(X)$ 
 $$
 P = X {(X^T X)}^{-1} X^T
 $$
@@ -85,49 +85,78 @@ The traditional SGLMM and RHZ model both share very similar approach to that of 
 
 ## 4. Sparse reparameterization of the areal SGLMM
 
-Although the RHZ model is able to alleviate confounding, it does not allow parsimonious fitting of the residual clustering. Because the geometry corresponding to the projection $P^{\bot}$ fails to account for the underlying graph $G$, the RHZ model permits structure of negative spatial dependence (i.e. repulsion) in the random effects. However, neighboring observation tends to be similar, rather than dissimilar, so patterns of attraction are more useful in practice. The proposed reparameterized model considers an alternative projection that captures the geometry of the models, thus allowing patterns of positive spatial dependence (i.e. attraction). Utilizing the geometry of the models also leads to dimension reduction of the random effects naturally. 
+The RHZ model does not allow parsimonious fitting of the residual clustering. Because the geometry corresponding to the projection $P^{\bot}$ fails to account for the underlying graph $G$, the RHZ model permits structure of negative spatial dependence (i.e. repulsion) in the random effects. However, neighboring observation tends to be similar, rather than dissimilar, so patterns of attraction are more useful in practice. The proposed reparameterized model considers an alternative projection that captures the geometry of the models, thus allowing only patterns of positive spatial dependence (i.e. attraction). Utilizing the geometry of the models also leads to dimension reduction of the random effects naturally. 
 
 ### The reparameterized model
 
-The random effects for the reparameterized model 
+The random effects for the sparse, reparameterized areal SGLMM 
 
 i) allow patterns of positive spatial dependence (i.e. attraction) while excluding patterns of repulsion and 
 
 ii) have dimension much smaller than $n$. 
 
-Consider the operator $(I - 11^T/n) A (I - 11^T/n)$ that appears in the numerator (top) of Moran's $I$-statistic 
-
+Consider the operator $(I - 11^T/n) A (I - 11^T/n)$ that appears in the numerator (top) of Moran's $I$-statistic (a commonly used for nonparametric method for spatial dependence) 
 $$
 I(A) = \frac{n} {1^TA1} \frac{Z^T (I - 11^T/n) A (I - 11^T/n) Z} {Z^T (I - 11^T/n) Z},
 $$
-where $I$ is a $nxn$ identity matrix and $1$ is a $n$-vector of $1$s, and replace $I - 11^T/n$ with $P^{\bot}$, then the resulting operator called the Moran operator for $X$ with respect to $G$, $P^{\bot} A P^{\bot}$, appears in the numerator of the generalized Moran's $I$-statistic 
-
+where $I$ is a $nxn$ identity matrix and $1$ is a $n$-vector of $1$s. Next replace $I - 11^T/n$ with $P^{\bot}$, then the resulting operator called the Moran operator for $X$ with respect to $G$, $P^{\bot} A P^{\bot}$, appears in the numerator of the generalized Moran's $I$-statistic 
 $$
 I_x (A) = \frac{n} {1^TA1} \frac{Z^T P^{\bot} A P^{\bot} Z} {Z^T P^{\bot} Z}.
 $$
 
-......
+It has been shown that (Boots & Tiefelsdorf, 2000) (a)...... and (b) the eigenvectors include all possible mutually distinct patterns of clustering residual to $X$ while accounting for $G$. The positive and negative eigenvalues correspond to varying degrees of positive and negative spatial dependence, respectively, and the associated eigenvectors are the patterns of spatial clustering of data. 
 
-
-Assume $M$ to be a matrix that contains the first $q \ll n$ eigenvectors of the Moran operator. Further assume $\lambda_q > 0$ since neighboring observations tend to be similar. 
+Assume $M$ to be a matrix that contains the first $q \ll n$ eigenvectors of the Moran operator. Further assume $\lambda_q > 0$ since neighboring observations tend to be similar, rather than dissimilar, in practice. As a result, at least half of the eigenvectors can be discarded, making it possible to achieve a much greater dimension reduction. 
 
 Replace $L$ with $M$ in the RHS model, then the first stage of the reparameterized model is given by 
-
 $$
 g({E(Z_i | \beta, \delta_S)}) = X_i \beta + M_i \delta_S,
 $$
-
 and the prior for the random effects $\delta_S$ becomes 
-
 $$
 p(\delta_S|\tau) \propto \tau^{q/2} exp(- \frac{\tau} {2} \delta_S^T Q_S \delta_S),
 $$
 where $Q_S = M^T Q M$. 
 
-The sparse, reparameterized SGLMM model is more closely analogous to the centred automodel than it is to the RHZ model. Both the sparse SGLMM model and centred automodel account for $X$ and the underlying graph. On the other hand, the RHZ model accounts for $X$ but does not account for the underlying graph. The uncentred automodel does not fit residual structure to $X$ but does account for the underlying graph by including (uncentred) autocovariate that sums the neighbors. 
+The sparse, reparameterized SGLMM model is more closely analogous to the centred automodel than it is to the RHZ model. Both the sparse SGLMM model and centred automodel account for $X$ and the underlying graph. On the other hand, the RHZ model accounts for $X$ but does not account for the underlying graph. The uncentred automodel does not fit residual structure to $X$ but does account for the underlying graph by including (uncentred) autocovariate that sums the neighbors.
+
+An alternative measure of spatial dependence is Geary's $C$, which uses the graph Laplacian $Q$ in place of $A$ (Geary, 1954). Geary's $C$ is the spatial analogue of Durbin–Watson statistic for measuring autocorrelation in the residuals from a time series regression model (Durbin & Watson, 1950). The eigensystem of $P^{\bot} Q P^{\bot}$ would then be an alternative to that of $P^{\bot} A P^{\bot}$. 
+
+```{r, echo = FALSE, error = FALSE, message = FALSE}
+library(tidyverse)
+library(pander)
+```
+
+```{r, echo = FALSE, error = FALSE}
+tb_1 <- tibble(
+  Model = c("Traditional SGLMM", "Uncentred automodel", 
+            "Centred automodel", "RHZ SGLMM", "Sparse SGLMM"),
+  Confounded = c("Yes", "Yes", "No", "No", "No"), 
+  Account_G = c("No", "Yes", "Yes", "No", "Yes")
+)
+
+tb_1 %>% pandoc.table(caption = "Comparision of various SGLMMs") %>% pander
+```
+
 
 
 ## 5. Dimension reduction for spatial models
+
+
+
+
+## 6. Simulated application
+
+All three spatial models (e.g. Bernoulli, Poisson and Gaussian) are applied in a Bayesian setting. MCMC algorithms such as...... are used. 
+
+### 6.1 Binary data
+
+### 6.2 Count data
+
+### 6.3 Normal data
+
+
+## 7. Discussion
 
 
 
