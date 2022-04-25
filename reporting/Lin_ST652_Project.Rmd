@@ -106,9 +106,9 @@ $$
 
 It has been shown that (Boots & Tiefelsdorf, 2000) (a)...... and (b) the eigenvectors include all possible mutually distinct patterns of clustering residual to $X$ while accounting for $G$. The positive and negative eigenvalues correspond to varying degrees of positive and negative spatial dependence, respectively, and the associated eigenvectors are the patterns of spatial clustering of data. 
 
-Assume $M$ to be a matrix that contains the first $q \ll n$ eigenvectors of the Moran operator. Further assume $\lambda_q > 0$ since neighboring observations tend to be similar, rather than dissimilar, in practice. As a result, at least half of the eigenvectors can be discarded, making it possible to achieve a much greater dimension reduction. 
+Assume $M$ to be a matrix that contains the first $q \ll n$ eigenvectors of the Moran operator. Further assume $\lambda_q > 0$ since neighboring observations tend to be similar, rather than dissimilar, in practice. At least half of the eigenvectors can be discarded as a result, making it possible to achieve a much greater dimension reduction. 
 
-Replace $L$ with $M$ in the RHS model, then the first stage of the reparameterized model is given by 
+Replacing $L$ with $M$ in the RHS model, the first stage of the reparameterized model is given by 
 $$
 g({E(Z_i | \beta, \delta_S)}) = X_i \beta + M_i \delta_S,
 $$
@@ -121,6 +121,8 @@ where $Q_S = M^T Q M$.
 The sparse, reparameterized SGLMM model is more closely analogous to the centred automodel than it is to the RHZ model. Both the sparse SGLMM model and centred automodel account for $X$ and the underlying graph. On the other hand, the RHZ model accounts for $X$ but does not account for the underlying graph. The uncentred automodel does not fit residual structure to $X$ but does account for the underlying graph by including (uncentred) autocovariate that sums the neighbors.
 
 An alternative measure of spatial dependence is Geary's $C$, which uses the graph Laplacian $Q$ in place of $A$ (Geary, 1954). Geary's $C$ is the spatial analogue of Durbin–Watson statistic for measuring autocorrelation in the residuals from a time series regression model (Durbin & Watson, 1950). The eigensystem of $P^{\bot} Q P^{\bot}$ would then be an alternative to that of $P^{\bot} A P^{\bot}$. 
+
+Table 1 compares and contrasts the five models. 
 
 ```{r, echo = FALSE, error = FALSE, message = FALSE}
 library(tidyverse)
@@ -139,10 +141,15 @@ tb_1 %>% pandoc.table(caption = "Comparision of various SGLMMs") %>% pander
 ```
 
 
-
 ## 5. Dimension reduction for spatial models
 
+Fitting a GP (Gaussian process) model can be computationally expensive since it requires the repeated evaluation of expressions involving inversion of the covariance matrix $H$($=H(\phi)$). One approach is to consider Cholesky decomposition of $H$. However, time complexity of the overall fitting algorithm is in $\mathcal{O}(n^3)$ since Cholesky decomposition of a typically dense $H$ is in $\mathcal{O}(n^3)$. This computational expense makes the analyses of large-scale point-referenced data sets time consuming or indefeasible. Efforts to reduce the computational burden have resulted in approaches such as discrete process convolution (Higdon, 2002), fixed rank kriging (Cressie & Johannesson, 2008), Gaussian predictive process models (Banerjee et al., 2008), covariance tapering (Furrer et al., 2006) and approximation by a GMRF (Rue & Tjelmeland, 2002). 
 
+Fitting an areal mixed model can also be computationally demanding. 
+
+......
+
+Computational challenge of fitting the RHZ or sparse model lies respectively in the evaluation of the quadratic form $\delta^TQ_R\delta$ or $\delta_S^TQ_S\delta_S$. Time complexity of the operation for the RHZ model is in $\mathcal{O}(n^2)$, which is significant enough to discourage or prevent application of the model to large data sets. Evaluation of the quadratic form $\delta_S^TQ_S\delta_S$ for the sparse model can be $\mathcal{O}(1)$, which makes the model more suitable for large-scale areal data sets. 
 
 
 ## 6. Simulated application
@@ -170,4 +177,6 @@ All three spatial models (e.g. Bernoulli, Poisson and Gaussian) are applied in a
 [Haran, M. (2011). Gaussian random field models for spatial data. Handbook of Markov Chain Monte Carlo, 449-478.](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.210.4099&rep=rep1&type=pdf)
 
 **Hughes, J., & Haran, M. (2013). Dimension reduction and alleviation of confounding for spatial generalized linear mixed models. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 75(1), 139-159.**
+
+
 

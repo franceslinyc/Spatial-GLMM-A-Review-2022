@@ -64,24 +64,6 @@ The proposed model is also one of the first dimension reduction techniques for s
 
 -
 
-## Comparision of various SGLMMs
-
-```{r, echo = FALSE, error = FALSE, message = FALSE}
-library(tidyverse)
-library(pander)
-```
-
-```{r, echo = FALSE, error = FALSE}
-tb_1 <- tibble(
-  Model = c("Traditional SGLMM", "Uncentred automodel", 
-            "Centred automodel", "RHZ SGLMM", "Sparse SGLMM"),
-  Confounded = c("Yes", "Yes", "No", "No", "No"), 
-  Account_G = c("No", "Yes", "Yes", "No", "Yes")
-)
-
-tb_1 %>% pandoc.table(caption = "Comparision of various SGLMMs") %>% pander
-```
-
 
 ## Traditional SGLMM
 
@@ -223,7 +205,7 @@ $$
 
 ## The sparse, reparameterized areal SGLMM
 
-Replace $L$ with $M$ in the RHS model, then the first stage of the reparameterized model is given by 
+Replacing $L$ with $M$ in the RHS model, the first stage of the reparameterized model is given by 
 $$
 g({E(Z_i | \beta, \delta_S)}) = X_i \beta + M_i \delta_S,
 $$
@@ -233,6 +215,38 @@ p(\delta_S|\tau) \propto \tau^{q/2} exp(- \frac{\tau} {2} \delta_S^T Q_S \delta_
 $$
 where $Q_S = M^T Q M$. 
 
+Note. It is assumed that
+
+1. $M$ is a matrix that contains the first $q \ll n$ eigenvectors of the Moran operator.
+
+2. $\lambda_q > 0$ (since neighboring observations tend to be similar in practice). Half of the eigenvectors can be discarded as a result, making it possible to achieve a much greater dimension reduction.  
+
+
+## Comparision of various SGLMMs
+
+Table 1 compares and contrasts the five models. 
+
+```{r, echo = FALSE, error = FALSE, message = FALSE}
+library(tidyverse)
+library(pander)
+```
+
+```{r, echo = FALSE, error = FALSE}
+tb_1 <- tibble(
+  Model = c("Traditional SGLMM", "Uncentred automodel", 
+            "Centred automodel", "RHZ SGLMM", "Sparse SGLMM"),
+  Confounded = c("Yes", "Yes", "No", "No", "No"), 
+  Account_G = c("No", "Yes", "Yes", "No", "Yes")
+)
+
+tb_1 %>% pandoc.table(caption = "Comparision of various SGLMMs") %>% pander
+```
+
 
 ## Dimension reduction for spatial models
+
+
+
+Evaluation of the quadratic form $\delta_S^TQ_S\delta_S$ for the sparse model can be $\mathcal{O}(1)$, which makes the model more suitable (than the RHZ model) for large-scale data sets. 
+
 
