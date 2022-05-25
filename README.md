@@ -7,7 +7,7 @@ Frances Lin
 
 ## Description 
 
-Review a paper about a sparse, reparameterized SGLMM (Spatial Generalized Linear Mixed Model) that alleviates spatial confounding and speeds computation through dimension reduction: introduction, review (SGLMM through undirected graphs, GMRFs, automodel, RHS model), and.
+Review and replicate part of the results from a paper about a sparse, reparameterized SGLMM (Spatial Generalized Linear Mixed Model) that alleviates spatial confounding and speeds computation through dimension reduction: introduction, review (traditional SGLMM, automodel, RHS model), sparse SGLMM and simulation. 
 
 ## Documentation 
 
