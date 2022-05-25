@@ -109,7 +109,7 @@ Note. A SGLMM
 
 1. can be reformatted by replacing GMRF with GP (Gaussian process) for point-referenced data (or geostatistical) data. 
 
-2. is restricted to a Bayesian or restricted maximum likelihood (REML) analysis since the prior (2) is improper. 
+2. is restricted to a **Bayesian** or restricted maximum likelihood (REML) analysis since the prior (2) is improper. 
 
 
 ## Spatial confounding (via the automodel)
