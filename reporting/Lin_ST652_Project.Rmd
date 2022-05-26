@@ -19,13 +19,11 @@ A sparse, reparameterized model is proposed, and it is able to alleviate confoun
 
 ## 2. Traditional SGLMM (Spatial Generalized Linear Mixed Model) 
 
+The traditional SGLMM (sometimes referred to as the BYM model) is a hierarchical model (Besag, et al., 1991). 
+
 ### Undirected graphs
 
-Let 
-$$
-G = (V, E)
-$$ 
-be an undirected, labelled graph, where $V = \{1, 2,...,n \}$ is a set of vertices (nodes) and $E = \{ i,j \}$ is a set of edges, where $i, j \in V,$ $i \neq j$. Each vertex $v$ represents an area of interest and each edge $e$ represents the proximity of areas $i$ and $j$. The graph $G$ is represented using an adjacency matrix $A$, which is a $nxn$ matrix with $diag(A) = 0$ and entries $A_{ij} = 1 \{ (i, j) \in E, i \neq j\},$ where $1 (\cdot)$ is an indicator function. That is, if the entry $a_{ij}$ is $=1$, then vertex $v_i$ and $v_j$ are adjacent, and the entry is $=0$, otherwise. 
+Let $G = (V, E)$ be an undirected, labelled graph, where $V = \{1, 2,...,n \}$ is a set of vertices (nodes) and $E = \{ i,j \}$ is a set of edges, where $i, j \in V,$ $i \neq j$. Each vertex $v$ represents an area of interest and each edge $e$ represents the proximity of areas $i$ and $j$. The graph $G$ is represented using an adjacency matrix $A$, which is a $nxn$ matrix with $diag(A) = 0$ and entries $A_{ij} = 1 \{ (i, j) \in E, i \neq j\},$ where $1 (\cdot)$ is an indicator function. That is, if the entry $a_{ij}$ is $=1$, then vertex $v_i$ and $v_j$ are adjacent, and the entry is $=0$, otherwise. 
 
 ### The traditional SGLMM
 
@@ -49,7 +47,7 @@ For spatial data over a continuous domain, i.e. point-referenced data or geostat
 
 ### The automodel 
 
-The automodel, SGLMM's closest competitor, is a Markov random-field model that incorporates dependence directly and is defined as 
+The automodel, SGLMM's closest competitor, is a Markov random field (MRF) model that incorporates dependence directly and is defined as 
 $$
 g({E(Z_i | \beta, \eta, Z_{-i})}) = X_i \beta + \eta \sum_{(i,j) \in E} Z^*_j, \ \ \ \ \ \ \ \ \ \ (3)
 $$
@@ -59,7 +57,7 @@ The sum term $\sum_{(i,j) \in E} Z^*_j$ is called the autocovariate, and it is c
 
 ### The RHS model 
 
-The traditional SGLMM can also shown to be confounded. More specifically, introduction of the random effects can inflate the variance of the posterior distribution of $\beta$. This is because the traditional model contains predictors that are collinear with $X$, and this collinearity causes the variance inflation (Reich et al., 2006). 
+The traditional SGLMM can also shown to be confounded. More specifically, introduction of the random effects can inflate the variance of the posterior distribution of $\beta$. This is because the traditional model contains predictors that are collinear with $X$, and this collinearity causes the variance inflation (Reich et al., 2006). The RHS model (now refered to as the restricted spatial regression) not only seeks to alleviate confounding but also speeds computing (Reich et al., 2006). 
 
 Consider $P$ be a projection onto $C(X)$ 
 $$
@@ -85,7 +83,7 @@ The traditional SGLMM and RHZ model both share very similar approach to that of 
 
 ## 4. Sparse reparameterization of the areal SGLMM
 
-The RHZ model does not allow parsimonious fitting of the residual clustering. Because the geometry corresponding to the projection $P^{\bot}$ fails to account for the underlying graph $G$, the RHZ model permits structure of negative spatial dependence (i.e. repulsion) in the random effects. However, neighboring observation tends to be similar, rather than dissimilar, so patterns of attraction are more useful in practice. The proposed reparameterized model considers an alternative projection that captures the geometry of the models, thus allowing only patterns of positive spatial dependence (i.e. attraction). Utilizing the geometry of the models also leads to dimension reduction of the random effects naturally. 
+The RHZ model does not allow parsimonious fitting of the residual clustering. Because the corresponding geometry of the projection $P^{\bot}$ fails to account for the underlying graph $G$, the RHZ model permits structure of negative spatial dependence (i.e. repulsion) in the random effects. However, neighboring observation tends to be similar, rather than dissimilar, so patterns of attraction are more useful in practice. The proposed reparameterized model considers an alternative projection that captures the geometry of the models, thus allowing only patterns of positive spatial dependence (i.e. attraction). Utilizing the geometry of the models also leads to dimension reduction of the random effects naturally. 
 
 ### The reparameterized model
 
@@ -101,13 +99,19 @@ I(A) = \frac{n} {1^TA1} \frac{Z^T (I - 11^T/n) A (I - 11^T/n) Z} {Z^T (I - 11^T/
 $$
 where $I$ is a $nxn$ identity matrix and $1$ is a $n$-vector of $1$s. Next replace $I - 11^T/n$ with $P^{\bot}$, then the resulting operator called the Moran operator for $X$ with respect to $G$, $P^{\bot} A P^{\bot}$, appears in the numerator of the generalized Moran's $I$-statistic 
 $$
-I_x (A) = \frac{n} {1^TA1} \frac{Z^T P^{\bot} A P^{\bot} Z} {Z^T P^{\bot} Z}.
+I_X (A) = \frac{n} {1^TA1} \frac{Z^T P^{\bot} A P^{\bot} Z} {Z^T P^{\bot} Z},
 $$
+where $P$ again is a projection onto $C(X)$ so $P^{\bot}$ is the projection onto $C(X)$'s complement. 
 
-It has been shown that (Boots & Tiefelsdorf, 2000) (a)...... and (b) the eigenvectors include all possible mutually distinct patterns of clustering residual to $X$ while accounting for $G$. The positive and negative eigenvalues correspond to varying degrees of positive and negative spatial dependence, respectively, and the associated eigenvectors are the patterns of spatial clustering of data. 
+Here, it has been shown that (Boots & Tiefelsdorf, 2000) 
+
+(a) the (standardized) spectrum of a Moran operatore comprises the possible values for the corresponding $I_X(A)$ and 
+
+(b) the eigenvectors include all possible mutually distinct patterns of clustering residual to $X$ while accounting for $G$. 
+
+The positive and negative eigenvalues correspond to varying degrees of positive and negative spatial dependence, respectively, and the associated eigenvectors are the patterns of spatial clustering of data. 
 
 Assume $M$ to be a matrix that contains the first $q \ll n$ eigenvectors of the Moran operator. Further assume $\lambda_q > 0$ since neighboring observations tend to be similar, rather than dissimilar, in practice. At least half of the eigenvectors can be discarded as a result, making it possible to achieve a much greater dimension reduction. 
-
 Replacing $L$ with $M$ in the RHS model, the first stage of the reparameterized model is given by 
 $$
 g({E(Z_i | \beta, \delta_S)}) = X_i \beta + M_i \delta_S,
@@ -118,7 +122,7 @@ p(\delta_S|\tau) \propto \tau^{q/2} exp(- \frac{\tau} {2} \delta_S^T Q_S \delta_
 $$
 where $Q_S = M^T Q M$. 
 
-The sparse, reparameterized SGLMM model is more closely analogous to the centred automodel than it is to the RHZ model. Both the sparse SGLMM model and centred automodel account for $X$ and the underlying graph. On the other hand, the RHZ model accounts for $X$ but does not account for the underlying graph. The uncentred automodel does not fit residual structure to $X$ but does account for the underlying graph by including (uncentred) autocovariate that sums the neighbors.
+The sparse, reparameterized SGLMM model is more closely analogous to the centred automodel than it is to the RHZ model. Both the sparse SGLMM model and centred automodel account for $X$ and the underlying graph. On the other hand, the RHZ model accounts for $X$ but does not account for the underlying graph. The uncentred automodel does not fit residual structure to $X$ but does account for the underlying graph by including (uncentred) autocovariate that sums the neighbors. 
 
 An alternative measure of spatial dependence is Geary's $C$, which uses the graph Laplacian $Q$ in place of $A$ (Geary, 1954). Geary's $C$ is the spatial analogue of Durbin–Watson statistic for measuring autocorrelation in the residuals from a time series regression model (Durbin & Watson, 1950). The eigensystem of $P^{\bot} Q P^{\bot}$ would then be an alternative to that of $P^{\bot} A P^{\bot}$. 
 
@@ -145,9 +149,7 @@ tb_1 %>% pandoc.table(caption = "Comparision of various SGLMMs") %>% pander
 
 Fitting a GP (Gaussian process) model can be computationally expensive since it requires the repeated evaluation of expressions involving inversion of the covariance matrix $H$($=H(\phi)$). One approach is to consider Cholesky decomposition of $H$. However, time complexity of the overall fitting algorithm is in $\mathcal{O}(n^3)$ since Cholesky decomposition of a typically dense $H$ is in $\mathcal{O}(n^3)$. This computational expense makes the analyses of large-scale point-referenced data sets time consuming or indefeasible. Efforts to reduce the computational burden have resulted in approaches such as discrete process convolution (Higdon, 2002), fixed rank kriging (Cressie & Johannesson, 2008), Gaussian predictive process models (Banerjee et al., 2008), covariance tapering (Furrer et al., 2006) and approximation by a GMRF (Rue & Tjelmeland, 2002). 
 
-Fitting an areal mixed model can also be computationally demanding. 
-
-......
+Fitting an areal mixed model can also be computationally demanding. ......
 
 Computational challenge of fitting the RHZ or sparse model lies respectively in the evaluation of the quadratic form $\delta^TQ_R\delta$ or $\delta_S^TQ_S\delta_S$. Time complexity of the operation for the RHZ model is in $\mathcal{O}(n^2)$, which is significant enough to discourage or prevent application of the model to large data sets. Evaluation of the quadratic form $\delta_S^TQ_S\delta_S$ for the sparse model can be $\mathcal{O}(1)$, which makes the model more suitable for large-scale areal data sets. 
 
@@ -163,7 +165,9 @@ All three spatial models (e.g. Bernoulli, Poisson and Gaussian) are applied in a
 ### 6.3 Normal data
 
 
-## 7. Discussion
+## 7. Application
+
+## 8. Discussion 
 
 
 
@@ -177,6 +181,8 @@ All three spatial models (e.g. Bernoulli, Poisson and Gaussian) are applied in a
 [Haran, M. (2011). Gaussian random field models for spatial data. Handbook of Markov Chain Monte Carlo, 449-478.](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.210.4099&rep=rep1&type=pdf)
 
 **Hughes, J., & Haran, M. (2013). Dimension reduction and alleviation of confounding for spatial generalized linear mixed models. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 75(1), 139-159.**
+
+Hughes, J. (2014). ngspatial: A Package for Fitting the Centered Autologistic and Sparse Spatial Generalized Linear Mixed Models for Areal Data. R Journal, 6(2). 
 
 
 
