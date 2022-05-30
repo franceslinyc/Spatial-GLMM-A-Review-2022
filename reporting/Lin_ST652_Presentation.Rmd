@@ -56,16 +56,24 @@ The proposed model is also one of the first dimension reduction techniques for s
 
 - Traditional SGLMM (Spatial Generalized Linear Mixed Model) 
 
-- Spatial confounding (via the automodel)
+- Spatial confounding (via the automodel) 
 
 - RHZ model 
 
-- Sparse reparameterization of the areal SGLMM
+- **Sparse reparameterization of the areal SGLMM** 
 
--
+- Dimension reduction
+
+- Simulated application 
+
+- Application (using the **R** package `ngspatial`) 
+
+- Discussion 
 
 
 ## Traditional SGLMM
+
+The traditional SGLMM (sometimes referred to as the BYM model) is a hierarchical model (Besag, et al., 1991). 
 
 Let $G = (V, E)$ be an undirected, labelled graph, where $V = \{1, 2,...,n \}$ is a set of vertices (nodes) and $E = \{ i,j \}$ is a set of edges, where $i, j \in V,$ $i \neq j$. 
 
@@ -95,7 +103,7 @@ Different types of data require different canonical choices of the link function
 
 ## GMRF prior for the random effects
 
-The field of random effects $W = {(W_1,...,W_n)}^{T}$, through which spatial dependence is incorporated, is assumed to follow the intrinsic conditionally autoregressive or improper GMRF prior
+The field of random effects $W = {(W_1,...,W_n)}^{T}$, through which spatial dependence is incorporated, is assumed to follow the intrinsic conditionally autoregressive (ICAR) or improper GMRF prior 
 $$
 p(W|\tau) \propto \tau^{rank(Q)/2} exp(- \frac{\tau} {2} W^T Q W), \ \ \ \ \ \ \ \ (2)
 $$
@@ -105,7 +113,7 @@ Note. A SGLMM
 
 1. can be reformatted by replacing GMRF with GP (Gaussian process) for point-referenced data (or geostatistical) data. 
 
-2. is restricted to a **Bayesian** or restricted maximum likelihood (REML) analysis since the prior (2) is improper. 
+2. is restricted to a Bayesian or restricted maximum likelihood (REML) analysis since the prior (2) is improper. 
 
 
 ## Spatial confounding (via the automodel)
@@ -125,15 +133,15 @@ where
 
 ## Spatial confounding (via the automodel)
 
-- For the centred automodel, $Z^*_j = Z_j - \mu_j$, where $\mu_j$ is the independence expectation of $Z_j$ (i.e. $\mu_j = E(Z_j | \beta, \eta = 0) = g^{-1} (X_j \beta)$). 
+- For the centered automodel, $Z^*_j = Z_j - \mu_j$, where $\mu_j$ is the independence expectation of $Z_j$ (i.e. $\mu_j = E(Z_j | \beta, \eta = 0) = g^{-1} (X_j \beta)$). 
 
-- For the uncentred automodel, $Z^*_j = Z_j$. 
+- For the uncentered automodel, $Z^*_j = Z_j$. 
 
 The sum term $\sum_{(i,j) \in E} Z^*_j$ is called the autocovariate, and it is considered as a synthetic predictor. 
 
-- The centred autocovariate makes the dependence parameter easily interpretable ($\eta$ captures the relativity of an observation to its neighbours, conditional on the hypothesized regression component). 
+- The centered autocovariate makes the dependence parameter easily interpretable ($\eta$ captures the relativity of an observation to its neighbours, conditional on the hypothesized regression component). 
 
-- The uncentred autocovariate not only poses conceptual challenge but also shows spatial confounding. 
+- The uncentered autocovariate not only poses conceptual challenge but also shows spatial confounding. 
 
 
 ## The RHS model 
@@ -183,7 +191,7 @@ ii) utilizes the geometry of the models, which leads to dimension reduction of t
 
 ## The sparse, reparameterized areal SGLMM
 
-Consider the operator $(I - 11^T/n) A (I - 11^T/n)$ that appears in the numerator (top) of Moran's $I$-statistic (a commonly used for nonparametric method for spatial dependence) 
+Consider the operator $(I - 11^T/n) A (I - 11^T/n)$ that appears in the numerator of Moran's $I$-statistic (a commonly used for nonparametric method for spatial dependence) 
 $$
 I(A) = \frac{n} {1^TA1} \frac{Z^T (I - 11^T/n) A (I - 11^T/n) Z} {Z^T (I - 11^T/n) Z},
 $$
@@ -230,10 +238,10 @@ library(pander)
 
 ```{r, echo = FALSE, error = FALSE}
 tb_1 <- tibble(
-  Model = c("Traditional SGLMM", "Uncentred automodel", 
-            "Centred automodel", "RHZ SGLMM", "Sparse SGLMM"),
+  Model = c("Traditional SGLMM", "Uncentered automodel", 
+            "RHZ SGLMM", "Centered automodel", "Sparse SGLMM"),
   Confounded = c("Yes", "Yes", "No", "No", "No"), 
-  Account_G = c("No", "Yes", "Yes", "No", "Yes")
+  Account_G = c("No", "Yes", "No", "Yes", "Yes")
 )
 
 tb_1 %>% pandoc.table(caption = "Comparision of various SGLMMs") %>% pander
@@ -242,8 +250,101 @@ tb_1 %>% pandoc.table(caption = "Comparision of various SGLMMs") %>% pander
 
 ## Dimension reduction for spatial models
 
+- An areal mixed model: Metropolis-Hastings algorithm for sampling from the posterior distribution of the field of random effects $W$ when components of $W$ exhibit strong *a posteriori* dependence is slow. Various methods such as MCMC block sampler have been proposed. 
+
+- The random effects for the RHZ and the sparse models, in contrast, are *a posteriori* uncorrelated. 
+
+- The RHZ model: Time complexity of the operation is in $\mathcal{O}(n^2)$, which is still significant enough to discourage or prevent application of the model to large data sets. 
+
+- The sparse model: Evaluation of the quadratic form $\delta_S^TQ_S\delta_S$ can be $\mathcal{O}(1)$, which makes the model more suitable for large-scale data sets. 
 
 
-Evaluation of the quadratic form $\delta_S^TQ_S\delta_S$ for the sparse model can be $\mathcal{O}(1)$, which makes the model more suitable (than the RHZ model) for large-scale data sets. 
+## Simulated application 
+
+The section is kept as a brief summary, and the figures are obtained from the paper. 
+
+Several models (e.g. a non-spatial ordinary linear model, the centered autologistic, the traditional SGLMM, the RHZ model and the sparse model) are fitted for the simulated data. 
+
+......
+
+
+## Simulated application 
+
+- Binary data: The RHZ and sparse models perform comparably and reliably. The traditional SGLMM, in contrast, not only gives poor estimate but also results in wider CIs. 
+
+![](../results/Figure4.png){height=75%, width=75%}
+
+## Simulated application 
+
+- Count data: The traditional SGLMM gives good estimate but again results in wider CIs.
+
+![](../results/Figure8.png){height=75%, width=75%}
+
+## Simulated application 
+
+- Normal data: The RHZ and sparse models result in narrower CIs because non-spatial model overestimates $\sigma^2$. The traditional SGLMM gives poor estimate and causes variance inflation so large that it causes a type II error. 
+
+![](../results/Figure9.png){height=75%, width=75%}
+
+## Application
+
+The `infant` data set contains infant mortality rate for $n = 3071$ US counties. 
+
+- The `infant` data set and its adjacency matrix matrix $A$ can be accessed from **R** package `ngspatial`, and it is a `data.frame` and `matrix` object. 
+
+- A sparse Poisson SGLMM is fitted 
+$$
+E(deaths_i | \beta, \delta_S) = birth_{Si} \exp(\beta_0 + \beta_1 low_i + \beta_2 black_i + \beta_3 hisp_i + 
+$$
+$$
+\beta_4 gini_i + \beta_5 aff_i + \beta_6 stab_i + M_i \delta_S), 
+$$
+where 
+  - death is the number of infant deaths, births is the number of live births, low is the rate of low birth weight, black is the percentage of black residents (2000 US census), hisp is the percentage of Hispanic residents (2000 US census), gini is the Gini coefficient which measures income inequality, aff is a score of social affluence and stab is residential stability. 
+
+
+## Application
+
+Results show that some estimates (e.g. `low_weight`, `gini`) differ from the results from the original study. The process of fitting the model takes approximately $52.47736$ mins. 
+
+```{}
+Coefficients:
+
+              Estimate      Lower      Upper      MCSE
+X           -4.987e+00 -5.166e+00  -4.807000 1.011e-03
+Xlow_weight -1.069e+02 -1.905e+02 -24.930000 3.409e-01
+Xblack       9.668e-03  8.516e-03   0.010840 9.032e-06
+Xhispanic   -5.416e-03 -6.578e-03  -0.004273 8.165e-06
+Xgini        6.227e-02 -3.803e-01   0.491400 2.547e-03
+Xaffluence  -9.476e-02 -1.070e-01  -0.082480 5.893e-05
+Xstability  -1.333e-02 -2.890e-02   0.002744 9.467e-05
+
+DIC: 10280 
+
+Number of iterations: 1000000 
+```
+
+
+## Discussion 
+
+
+## Reference
+
+Bolin, D. (2015). *Lecture 5: Intrinsic GMRFs Gaussian Markov random fields.* Personal Collection of D. Bolin, Chalmers University of Technology, Gothenburg Sweden.
+
+Haran, M. (2011). Gaussian random field models for spatial data. Handbook of Markov Chain Monte Carlo, 449-478.
+
+**Hughes, J., & Haran, M. (2013). Dimension reduction and alleviation of confounding for spatial generalized linear mixed models. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 75(1), 139-159.**
+
+Hughes, J. (2014). ngspatial: A Package for Fitting the Centered Autologistic and Sparse Spatial Generalized Linear Mixed Models for Areal Data. R Journal, 6(2).
+
+
+## Thank you!
+
+Reparameterized SGLMM (Spatial Generalized Linear Mixed Model): A Review
+
+Frances Lin 
+
+PhD student, Dept. of Statistics, Oregon State University 
 
 
