@@ -43,7 +43,7 @@ On the other hand, while another model named RHS model
 
 - can result in random-effects structure with negative spatial dependence (i.e. repulsion) that is not typically applied in practice. 
 
-A reparameterized model is proposed, and it is able to 
+In this paper, a reparameterized model is proposed, and it is able to 
 
 - alleviate confounding, and, at the same time, 
 
@@ -86,7 +86,7 @@ Let $G = (V, E)$ be an undirected, labelled graph, where $V = \{1, 2,...,n \}$ i
 
 Further let $Z = {(Z_1,...Z_n)}^{T}$ be the random field of interest, where $Z_i$ is the random variable associated with vertex $i$. Then, the first stage of the model is given by 
 $$
-g({E(Z_i | \beta, W_i)}) = X_i \beta + Wi, \ \ \ \ \ \ \ \ \ \ (1)
+g({E(Z_i | \beta, W_i)}) = X_i \beta + \mathbf{W_i}, \ \ \ \ \ \ \ \ \ \ (1)
 $$
 where 
 
@@ -96,7 +96,7 @@ where
 
 - $\beta$ is a $p$-vector of regression parameters and 
 
-- $W_i$ is a spatial random effect associated with vertex $i$.
+- **$W_i$ is a spatial random effect associated with vertex $i$.**
 
 Different types of data require different canonical choices of the link function $g$ (e.g. the logit function for spatial binary data and the logarithm function for spatial count data). 
 
@@ -154,7 +154,7 @@ P = X {(X^T X)}^{-1} X^T
 $$
 and let $P^{\bot}$ be the projection onto $C(X)$'s complement such that $P^{\bot} = I - P$, then equation (1) can be rewritten as 
 $$
-g({E(Z_i | \beta, W_i)}) = X_i \beta + K_i \gamma + L_i \delta, 
+g({E(Z_i | \beta, W_i)}) = X_i \beta + \mathbf{K_i} \gamma + \mathbf{L_i} \delta, 
 $$
 where $K$ and $L$ are orthogonal bases for $C(X)$ and $C(X)^{\bot}$ respectively and $\gamma$ and $\delta$ are random coefficients. 
 
@@ -165,7 +165,7 @@ $K$ and $X$ now share the same column space, and this is the source of the spati
 
 Since $K$ has no practical meaning, setting $\gamma = 0$, the first stage of the RHS model is given by 
 $$
-g({E(Z_i | \beta, \delta)}) = X_i \beta + L_i \delta,
+g({E(Z_i | \beta, \delta)}) = X_i \beta + \mathbf{L_i} \delta,
 $$
 and, compared to equation (2), the prior for the random effects $\delta$ becomes 
 $$
@@ -212,7 +212,7 @@ where $P$ again is a projection onto $C(X)$ so $P^{\bot}$ is the projection onto
 
 Replacing $L$ with $M$ in the RHS model, the first stage of the reparameterized model is given by 
 $$
-g({E(Z_i | \beta, \delta_S)}) = X_i \beta + M_i \delta_S,
+g({E(Z_i | \beta, \delta_S)}) = X_i \beta + \mathbf{M_i} \delta_S,
 $$
 and the prior for the random effects $\delta_S$ becomes 
 $$
@@ -222,9 +222,9 @@ where $Q_S = M^T Q M$.
 
 Note. It is assumed that
 
-1. $M$ is a matrix that contains the first $q \ll n$ eigenvectors of the Moran operator.
+1. $M$ is a matrix that contains the first $q \ll n$ eigenvectors of the Moran operator. 
 
-2. $\lambda_q > 0$ (since neighboring observations tend to be similar in practice). Half of the eigenvectors can be discarded as a result, making it possible to achieve a much greater dimension reduction.  
+2. $\lambda_q > 0$ (since neighboring observations tend to be similar in practice). Half of the eigenvectors can be discarded as a result, making it possible to achieve a much greater dimension reduction. 
 
 
 ## Comparision of various SGLMMs
@@ -250,13 +250,13 @@ tb_1 %>% pandoc.table(caption = "Comparision of various SGLMMs") %>% pander
 
 ## Dimension reduction for spatial models
 
-- An areal mixed model: Metropolis-Hastings algorithm for sampling from the posterior distribution of the field of random effects $W$ when components of $W$ exhibit strong *a posteriori* dependence is slow. Various methods such as MCMC block sampler have been proposed. 
+- An areal mixed model: Metropolis-Hastings algorithm for sampling from the posterior distribution of the field of random effects $W$ is slow when components of $W$ exhibit strong *a posteriori* dependence. Various methods such as MCMC block sampler have been proposed. 
 
 - The random effects for the RHZ and the sparse models, in contrast, are *a posteriori* uncorrelated. 
 
 - The RHZ model: Time complexity of the operation is in $\mathcal{O}(n^2)$, which is still significant enough to discourage or prevent application of the model to large data sets. 
 
-- The sparse model: Evaluation of the quadratic form $\delta_S^TQ_S\delta_S$ can be $\mathcal{O}(1)$, which makes the model more suitable for large-scale data sets. 
+- The sparse model: Evaluation of the quadratic form $\delta_S^TQ_S\delta_S$ can be $\mathcal{O}(1)$, which makes the model more suitable for large-scale data sets. (Recall that taking full advantage of $G$ reduces the $dim$ of random effects.)
 
 
 ## Simulated application 
@@ -290,7 +290,7 @@ Several models (e.g. a non-spatial ordinary linear model, the centered autologis
 
 The `infant` data set contains infant mortality rate for $n = 3071$ US counties. 
 
-- The `infant` data set and its adjacency matrix matrix $A$ can be accessed from **R** package `ngspatial`, and it is a `data.frame` and `matrix` object. 
+- The `infant` data set and its adjacency matrix $A$ (respectively, a `data.frame` and `matrix` object) can be accessed from the **R** package `ngspatial`. 
 
 - A sparse Poisson SGLMM is fitted 
 $$
@@ -327,6 +327,11 @@ Number of iterations: 1000000
 
 ## Discussion 
 
+## Discussion 
+
+(2) The sparse SGLMM appear faster, compared to the traditional SGLMM or the RHZ model. However, MCMC methods may still take hours or days to run. 
+
+- INLA algorithm (a project that I am currently working on for the Bayesian Statistics course) is a fast alternative for fitting areal and more models and can be accessed through the **R** package `R-INLA`. It would be interesting to see comparisons of accuracy and speed. 
 
 ## Reference
 
