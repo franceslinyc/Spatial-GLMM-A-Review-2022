@@ -184,7 +184,7 @@ However, the RHZ model does not allow parsimonious fitting of the residual clust
 
 The proposed reparameterized model 
 
-i) considers an alternative projection that captures the geometry of the models, thus allowing only patterns of positive spatial dependence (i.e. attraction).
+i) considers an alternative projection that captures the geometry of the models, thus allowing models with only patterns of positive spatial dependence (i.e. attraction).
 
 ii) utilizes the geometry of the models, which leads to dimension reduction of the random effects naturally. 
 
