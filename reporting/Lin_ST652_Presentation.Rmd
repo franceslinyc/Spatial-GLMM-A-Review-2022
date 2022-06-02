@@ -9,7 +9,7 @@ output: beamer_presentation
 
 The SGLMM (spatial generalized linear mixed model) 
 
-- is a hierarchical model that introduces spatial dependence through a GMRF (Gaussian Markov random field) (Besag et al., 1991). 
+- is a hierarchical model that introduces spatial dependence through a GMRF (Gaussian Markov random field, Besag et al., 1991). 
 
 - was initially proposed for prediction for count data, but 
 
@@ -158,7 +158,7 @@ g({E(Z_i | \beta, W_i)}) = X_i \beta + \mathbf{K_i} \gamma + \mathbf{L_i} \delta
 $$
 where $K$ and $L$ are orthogonal bases for $C(X)$ and $C(X)^{\bot}$ respectively and $\gamma$ and $\delta$ are random coefficients. 
 
-$K$ and $X$ now share the same column space, and this is the source of the spatial confounding. 
+$K$ and $X$ now share the same column space, and this is the source of the *spatial confounding*. 
 
 
 ## The RHS model 
@@ -184,7 +184,7 @@ However, the RHZ model does not allow parsimonious fitting of the residual clust
 
 The proposed reparameterized model 
 
-i) considers an alternative projection that captures the geometry of the models, thus allowing *only* patterns of positive spatial dependence (i.e. attraction).
+i) considers an alternative projection that captures the geometry of the models, thus allowing only patterns of positive spatial dependence (i.e. attraction).
 
 ii) utilizes the geometry of the models, which leads to dimension reduction of the random effects naturally. 
 
@@ -202,10 +202,6 @@ $$
 I_x (A) = \frac{n} {1^TA1} \frac{Z^T P^{\bot} A P^{\bot} Z} {Z^T P^{\bot} Z},
 $$
 where $P$ again is a projection onto $C(X)$ so $P^{\bot}$ is the projection onto $C(X)$'s complement. 
-
-
-## The sparse, reparameterized areal SGLMM
-
 
 
 ## The sparse, reparameterized areal SGLMM
@@ -263,9 +259,21 @@ tb_1 %>% pandoc.table(caption = "Comparision of various SGLMMs") %>% pander
 
 The section is kept as a brief summary, and the figures are obtained from the paper. 
 
-Several models (e.g. a non-spatial ordinary linear model, the centered autologistic, the traditional SGLMM, the RHZ model and the sparse model) are fitted for the simulated data. 
+Five models (e.g. a non-spatial ordinary linear model, the centered autologistic, the traditional SGLMM, the RHZ model and the sparse model) are fitted for the simulated binary, count and normal data. 
 
-......
+
+## Simulated application 
+
+SGLMMs are fitted using Metropolis-Hastings random walks and/or Gibbs updates. 
+
+- For the binary and count data, 
+  - $\beta$ is updated using a random walk with normal proposals $\beta^{(j+1)} \sim N (\beta^{(j)}, \hat{V})$, where $\hat{V}$ is the estimated asymptotic covariance matrix from a classical generalized linear model fit. 
+  - $W$ (for the traditional SGLMM) is updated using a univariate random walk with normal proposals. 
+  - $\delta$ (for the RHZ model) and $\delta_S$ (for the sparse SGLMM) are updated using a multivariate random walk with a spherical normal proposal. 
+
+- For the normal data, all parameters are updated using the Gibbs updates. 
+
+- For all three types of data, $\tau$ are Gibbs updates irrespective of the response distribution. 
 
 
 ## Simulated application 
@@ -327,6 +335,11 @@ Number of iterations: 1000000
 
 
 ## Discussion 
+
+(1) The sparse SGLMM not only alleviates spatial confounding but also accounts for the underlying graph while achieving dimension reduction naturally. 
+
+- However, due to time constraint, some of the computational details are not well explored in this project (e.g. the choice of operators, the choice of priors, MCMC methods and its variants as well as the `C++` code used in the package). 
+
 
 ## Discussion 
 

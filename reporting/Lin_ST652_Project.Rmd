@@ -12,7 +12,7 @@ The SGLMM (spatial generalized linear mixed model) for areal data is a hierarchi
 
 The SGLMM has been the dominant model for areal data because of its flexible hierarchical specification, the availability of the software `WinBUGS` for data analysis (Lunn et al., 2000) and various theoretical and computational advantages over the competitive model named automodel. However, SGLMMs suffer from two major shortcomings: i) variance inflation due to spatial confounding and ii) computational challenges posed by high dimensional latent variables (or random effects). 
 
-On the other hand, while another model named RHS model seeks to alleviate confounding by introducing synthetic predictors that are orthogonal to the fixed-effects predictors (Reich et al., 2006), failing to account for the underlying graph, the RHS model can result in random-effects structure with negative spatial dependence (i.e. repulsion), which is not typically applicable in practice. 
+On the other hand, while another model named RHS model seeks to alleviate confounding by introducing synthetic predictors that are orthogonal to the fixed-effects predictors (Reich et al., 2006), failing to account for the underlying graph, the RHS model can result in random-effects structure with negative spatial dependence (i.e. repulsion), which is not typically applied in practice. 
 
 In this paper, a sparse, reparameterized model is proposed, and it is able to alleviate confounding, and, at the same time, include patterns of positive spatial dependence (i.e. attraction) while excluding patterns of repulsion. Other methods have been proposed (Higdon, 2002; Cressie & Johannesson, 2008; Banerjee et al., 2008; Furrer et al., 2006; Rue & Tjelmeland, 2002), but these methods focus on dimension reduction for spatial point-referenced models. The proposed model is thus considered one of the first dimension reduction techniques for spatial areal models. 
 
@@ -152,7 +152,7 @@ tb_1 <- tibble(
 tb_1 %>% pandoc.table(caption = "Comparision of various SGLMMs") %>% pander
 ```
 
-The centered autologistic model and the sparse SGLMM can be fitted using the **R** package `ngspatial`(Hughes, 2014). 
+The centered autologistic model and the sparse SGLMM can be fitted using the **R** package `ngspatial` (Hughes, 2014). 
 
 
 ## 5. Dimension reduction for spatial models
@@ -168,9 +168,9 @@ The random effects for the RHZ and the sparse models, in contrast, are *a poster
 
 Since areal models are not directly related to my research area and simulation involves applying five of the aforementioned models to binary, count and normal data, this section is kept as a brief summary. 
 
-All three spatial models (e.g. Bernoulli, Poisson and Gaussian) are applied in a Bayesian setting. Several models (e.g. a non-spatial ordinary linear model, the centered autologistic, the traditional SGLMM, the RHZ model and the sparse model) are fitted. 
+All three spatial models (e.g. Bernoulli, Poisson and Gaussian) are applied in a Bayesian setting. Five models (e.g. a non-spatial ordinary linear model, the centered autologistic, the traditional SGLMM, the RHZ model and the sparse model) are fitted. 
 
-......
+SGLMMs are fitted using Metropolis-Hastings random walks and/or Gibbs updates. For the binary and count data, $\beta$ is updated using a random walk with normal proposals $\beta^{(j+1)} \sim N (\beta^{(j)}, \hat{V})$, where $\hat{V}$ is the estimated asymptotic covariance matrix from a classical generalized linear model fit. $W$ (for the traditional SGLMM) is updated using a univariate random walk with normal proposals. $\delta$ (for the RHZ model) and $\delta_S$ (for the sparse SGLMM) are updated using a multivariate random walk with a spherical normal proposal. For the normal data, all parameters are updated using the Gibbs updates. For all three types of data, $\tau$ are Gibbs updates irrespective of the response distribution. 
 
 ### 6.1 Binary data 
 
@@ -224,7 +224,7 @@ Number of iterations: 1000000
 
 ## 8. Discussion 
 
-(1) The sparse SGLMM not only alleviates spatial confounding but also accounts for the underlying graph while achieving dimension reduction naturally. However, due to time constraint, some of the computational details are not well explored in this project. For example, MCMC methods and its variants...... 
+(1) The sparse SGLMM not only alleviates spatial confounding but also accounts for the underlying graph while achieving dimension reduction naturally. However, due to time constraint, some of the computational details are not well explored in this project. For example, the choice of operators, the choice of priors, MCMC methods and its variants as well as the `C++` code used in the package that enables efficient computation can be explores further. 
 
 (2) The sparse SGLMM appear faster, compared to the traditional SGLMM or the RHZ model. However, MCMC methods may still take hours or days to run. INLA algorithm (a project that I am currently working on for the Bayesian Statistics course) is a fast alternative for fitting areal and more models and can be accessed through the **R** package `R-INLA`. It would be interesting to see comparisons of accuracy and speed. 
 
