@@ -8,7 +8,7 @@ header-includes: \usepackage{setspace}\onehalfspacing
 
 ## 1. Introduction 
 
-The SGLMM (spatial generalized linear mixed model) for areal data is a hierarchical model that introduces spatial dependence through a GMRF (Gaussian Markov random field) (Besag et al., 1991). It was initially proposed for prediction for count data, which can be reframed as problem of image restoration. It has later been applied to estimation and prediction for other types of data (e.g. binary) and found applications in many fields (e.g. ecology, geology, epidemiology, image analysis, and forestry). 
+The SGLMM (spatial generalized linear mixed model) for areal data is a hierarchical model that introduces spatial dependence through a GMRF (Gaussian Markov random field, Besag et al., 1991). It was initially proposed for prediction for count data, which can be reframed as problem of image restoration. It has later been applied to estimation and prediction for other types of data (e.g. binary) and found applications in many fields (e.g. ecology, geology, epidemiology, image analysis, and forestry). 
 
 The SGLMM has been the dominant model for areal data because of its flexible hierarchical specification, the availability of the software `WinBUGS` for data analysis (Lunn et al., 2000) and various theoretical and computational advantages over the competitive model named automodel. However, SGLMMs suffer from two major shortcomings: i) variance inflation due to spatial confounding and ii) computational challenges posed by high dimensional latent variables (or random effects). 
 

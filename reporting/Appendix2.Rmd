@@ -1,0 +1,15 @@
+---
+title: "Appendix2"
+author: "Frances Lin"
+output: pdf_document
+---
+
+```{r}
+library(ngspatial)
+library(CARBayes)
+```
+
+```{r}
+data(infant)
+```
+
