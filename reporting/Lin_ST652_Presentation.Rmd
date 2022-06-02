@@ -86,7 +86,7 @@ Let $G = (V, E)$ be an undirected, labelled graph, where $V = \{1, 2,...,n \}$ i
 
 Further let $Z = {(Z_1,...Z_n)}^{T}$ be the random field of interest, where $Z_i$ is the random variable associated with vertex $i$. Then, the first stage of the model is given by 
 $$
-g({E(Z_i | \beta, W_i)}) = X_i \beta + \mathbf{W_i}, \ \ \ \ \ \ \ \ \ \ (1)
+g({E(Z_i | \beta, W_i)}) = X_i \beta + \mathbf{W_i}, \tag{1}
 $$
 where 
 
@@ -105,7 +105,7 @@ Different types of data require different canonical choices of the link function
 
 The field of random effects $W = {(W_1,...,W_n)}^{T}$, through which spatial dependence is incorporated, is assumed to follow the intrinsic conditionally autoregressive (ICAR) or improper GMRF prior 
 $$
-p(W|\tau) \propto \tau^{rank(Q)/2} exp(- \frac{\tau} {2} W^T Q W), \ \ \ \ \ \ \ \ (2)
+p(W|\tau) \propto \tau^{rank(Q)/2} exp(- \frac{\tau} {2} W^T Q W), \tag{2}
 $$
 where $\tau$ is a smoothing ("precision") parameter and $Q = diag(A1) - A$ is a precision matrix. The precision matrix $Q$ incorporates both dependence and prior uncertainty. 
 
@@ -120,7 +120,7 @@ Note. A SGLMM
 
 The automodel, SGLMM's closest competitor, is a Markov random field (MRF) model that incorporates dependence directly and is defined as 
 $$
-g({E(Z_i | \beta, \eta, Z_{-i})}) = X_i \beta + \eta \sum_{(i,j) \in E} Z^*_j, \ \ \ \ \ \ \ \ \ \ (3)
+g({E(Z_i | \beta, \eta, Z_{-i})}) = X_i \beta + \eta \sum_{(i,j) \in E} Z^*_j, \tag{3}
 $$
 where 
 
@@ -286,6 +286,7 @@ Several models (e.g. a non-spatial ordinary linear model, the centered autologis
 
 ![](../results/Figure9.png){height=75%, width=75%}
 
+
 ## Application
 
 The `infant` data set contains infant mortality rate for $n = 3071$ US counties. 
@@ -332,6 +333,7 @@ Number of iterations: 1000000
 (2) The sparse SGLMM appear faster, compared to the traditional SGLMM or the RHZ model. However, MCMC methods may still take hours or days to run. 
 
 - INLA algorithm (a project that I am currently working on for the Bayesian Statistics course) is a fast alternative for fitting areal and more models and can be accessed through the **R** package `R-INLA`. It would be interesting to see comparisons of accuracy and speed. 
+
 
 ## Reference
 
