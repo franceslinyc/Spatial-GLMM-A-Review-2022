@@ -262,7 +262,7 @@ The section is kept as a brief summary, and the figures are obtained from the pa
 Five models (e.g. a non-spatial ordinary linear model, the centered autologistic, the traditional SGLMM, the RHZ model and the sparse model) are fitted for the simulated binary, count and normal data. 
 
 
-## Simulated application 
+## Simulated application: Algorithms 
 
 SGLMMs are fitted using Metropolis-Hastings random walk and/or Gibbs updates. 
 
@@ -270,12 +270,12 @@ SGLMMs are fitted using Metropolis-Hastings random walk and/or Gibbs updates.
   - $\beta$ is updated using a random walk with normal proposals $\beta^{(j+1)} \sim N (\beta^{(j)}, \hat{V})$, where $\hat{V}$ is the estimated asymptotic covariance matrix from a classical generalized linear model fit. 
   - $W$ (for the traditional SGLMM) is updated using a univariate random walk with normal proposals. 
   - $\delta$ (for the RHZ model) and $\delta_S$ (for the sparse SGLMM) are updated using a multivariate random walk with a spherical normal proposal. 
-
 - For the normal data, all parameters are updated using Gibbs updates. 
 
 - For all three types of data, $\tau$ is a Gibbs update irrespective of the response distribution. 
 
-## Simulated application 
+
+## Simulated application: Data sets 
 
 - Binary data: 
   (1) setting $\tau=1$, 
@@ -381,5 +381,4 @@ Reparameterized SGLMM (Spatial Generalized Linear Mixed Model): A Review
 Frances Lin 
 
 PhD student, Dept. of Statistics, Oregon State University 
-
 
