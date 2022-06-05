@@ -166,21 +166,25 @@ The random effects for the RHZ and the sparse models, in contrast, are *a poster
 
 ## 6. Simulated application
 
-Since areal models are not directly related to my research area and simulation involves applying five of the aforementioned models to binary, count and normal data, this section is kept as a brief summary. 
+This section is kept as a brief summary. All three spatial models (e.g. Bernoulli, Poisson and Gaussian) are applied in a Bayesian setting. Five models (e.g. a non-spatial ordinary linear model, the centered autologistic, the traditional SGLMM, the RHZ model and the sparse model) are fitted. 
 
-All three spatial models (e.g. Bernoulli, Poisson and Gaussian) are applied in a Bayesian setting. Five models (e.g. a non-spatial ordinary linear model, the centered autologistic, the traditional SGLMM, the RHZ model and the sparse model) are fitted. 
-
-SGLMMs are fitted using Metropolis-Hastings random walks and/or Gibbs updates. For the binary and count data, $\beta$ is updated using a random walk with normal proposals $\beta^{(j+1)} \sim N (\beta^{(j)}, \hat{V})$, where $\hat{V}$ is the estimated asymptotic covariance matrix from a classical generalized linear model fit. $W$ (for the traditional SGLMM) is updated using a univariate random walk with normal proposals. $\delta$ (for the RHZ model) and $\delta_S$ (for the sparse SGLMM) are updated using a multivariate random walk with a spherical normal proposal. For the normal data, all parameters are updated using the Gibbs updates. For all three types of data, $\tau$ are Gibbs updates irrespective of the response distribution. 
+SGLMMs are fitted using Metropolis-Hastings random walk and/or Gibbs updates. For the binary and count data, $\beta$ is updated using a random walk with normal proposals $\beta^{(j+1)} \sim N (\beta^{(j)}, \hat{V})$, where $\hat{V}$ is the estimated asymptotic covariance matrix from a classical generalized linear model fit. $W$ (for the traditional SGLMM) is updated using a univariate random walk with normal proposals. $\delta$ (for the RHZ model) and $\delta_S$ (for the sparse SGLMM) are updated using a multivariate random walk with a spherical normal proposal. For the normal data, all parameters are updated using Gibbs updates. For all three types of data, $\tau$ is a Gibbs update irrespective of the response distribution. 
 
 ### 6.1 Binary data 
+
+A binary data is created by (1) setting $\tau=1$, (2) simulating random effects according to $\delta_S \sim N(0, Q_s^{-1})$, and (3) simulating independent observations according to $Z | \delta_S \sim Bern(p)$, where $p = \exp(x + y + M \delta_S) / (1 + \exp(x + y + M \delta_S))$ is a vector of true probabilities. 
 
 For simulated binary data, the RHZ and sparse models perform comparably and reliably. The traditional SGLMM, in contrast, not only gives poor estimate but also results in wider CIs. 
 
 ### 6.2 Count data 
 
+A count data is created by (1) simulating random effects according to $\delta_S \sim N(0, (3Q_s)^{-1})$, and (2) simulating independent observations according to $Z | \delta_S \sim Pos(\lambda)$, where $\lambda = \exp(x + y + M \delta_S)$ is a vector of true rates. 
+
 For the simulated count data, the traditional SGLMM gives good estimate but again results in wider CIs.
 
 ### 6.3 Normal data 
+
+A count data is created by (1) simulating random effects according to $\delta_S \sim N(0, Q_s^{-1})$, and (2) simulating observations according to $Z | \delta_S \sim N(\mu = x + y + M\delta_S, \sigma^2 I)$, where $\sigma^2 = 1$. 
 
 For the simulated normal data, the RHZ and sparse models result in narrower CIs because the non-spatial model overestimates $\sigma^2$. The traditional SGLMM gives poor estimate and causes variance inflation so large that it causes a type II error. 
 
@@ -224,7 +228,7 @@ Number of iterations: 1000000
 
 ## 8. Discussion 
 
-(1) The sparse SGLMM not only alleviates spatial confounding but also accounts for the underlying graph while achieving dimension reduction naturally. However, due to time constraint, some of the computational details are not well explored in this project. For example, the choice of operators, the choice of priors, MCMC methods and its variants as well as the `C++` code used in the package that enables efficient computation can be explored further. 
+(1) The sparse SGLMM not only alleviates spatial confounding but also accounts for the underlying graph while achieving dimension reduction naturally. However, due to time constraint, some of the computational details are not well explored in this project. For example, the choice of operators, the choice of priors, MCMC methods and its variants as well as the `C++` code and `parallel` package used in the package `ngspatial` to enable efficient computation can be explored further. 
 
 (2) The sparse SGLMM appear faster, compared to the traditional SGLMM or the RHZ model. However, MCMC methods may still take hours or days to run. INLA algorithm (a project that I am currently working on for the Bayesian Statistics course) is a fast alternative for fitting areal and more models and can be accessed through the **R** package `R-INLA`. It would be interesting to see comparisons of accuracy and speed. 
 

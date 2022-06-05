@@ -264,16 +264,31 @@ Five models (e.g. a non-spatial ordinary linear model, the centered autologistic
 
 ## Simulated application 
 
-SGLMMs are fitted using Metropolis-Hastings random walks and/or Gibbs updates. 
+SGLMMs are fitted using Metropolis-Hastings random walk and/or Gibbs updates. 
 
 - For the binary and count data, 
   - $\beta$ is updated using a random walk with normal proposals $\beta^{(j+1)} \sim N (\beta^{(j)}, \hat{V})$, where $\hat{V}$ is the estimated asymptotic covariance matrix from a classical generalized linear model fit. 
   - $W$ (for the traditional SGLMM) is updated using a univariate random walk with normal proposals. 
   - $\delta$ (for the RHZ model) and $\delta_S$ (for the sparse SGLMM) are updated using a multivariate random walk with a spherical normal proposal. 
 
-- For the normal data, all parameters are updated using the Gibbs updates. 
+- For the normal data, all parameters are updated using Gibbs updates. 
 
-- For all three types of data, $\tau$ are Gibbs updates irrespective of the response distribution. 
+- For all three types of data, $\tau$ is a Gibbs update irrespective of the response distribution. 
+
+## Simulated application 
+
+- Binary data: 
+  (1) setting $\tau=1$, 
+  (2) simulating random effects according to $\delta_S \sim N(0, Q_s^{-1})$, and 
+  (3) simulating independent observations according to $Z | \delta_S \sim Bern(p)$, where $p = \exp(x + y + M \delta_S) / (1 + \exp(x + y + M \delta_S))$ is a vector of true probabilities. 
+
+- Count data: 
+  (1) simulating random effects according to $\delta_S \sim N(0, (3Q_s)^{-1})$, and 
+  (2) simulating independent observations according to $Z | \delta_S \sim Pos(\lambda)$, where $\lambda = \exp(x + y + M \delta_S)$ is a vector of true rates. 
+
+- Normal data: 
+  (1) simulating random effects according to $\delta_S \sim N(0, Q_s^{-1})$, and 
+  (2) simulating observations according to $Z | \delta_S \sim N(\mu = x + y + M\delta_S, \sigma^2 I)$, where $\sigma^2 = 1$. 
 
 
 ## Simulated application 
