@@ -289,10 +289,9 @@ For example, `sparse.sglmm.fit.binomial()`:
     - $\eta^{(j+1)} (= g(\cdot)^{(j+1)}) = X\beta^{(j+1)} + M\delta_S^{(j)}$
     - $\eta^{(j)} (= g(\cdot)^{(j)}) = X\beta^{(j)} + M\delta_S^{(j)}$
     - Construct the log-likelihood: $y^T \log(\hat{y}) + {(1 - y)}^T \log(1 - \hat{y}) + \cdots$ for $j+1$ and $j$, where $\hat{y} = g^{-1}(\eta)$ 
-    - Take ratio of the likelihood (or difference of the log-likelihood) for $j+1$ and $j$ and set it to $\alpha$ acceptance ratio 
+    - Take difference of the log-likelihood (ratio of the likelihood) for $j+1$ and $j$ and set it to $\alpha$ acceptance ratio 
 
-4. Generate $u \sim Unif(0,1)$ and if $u \leq \alpha$, then accept it as the next step $j+1$ and update $\delta_S$ and $\tau$. Otherwise, stay at the current step $j$. 
-    
+4. Generate $u \sim Unif(0,1)$ and if $\log(u) \leq \alpha$, then accept it as the next step $j+1$ and update $\beta$, $\delta_S$ and repeat and if..., then accept and update $\delta_S$ and $\tau$. Otherwise, stay at the current step $j$. (Nested if-else is required.) 
 
 ## Simulated application: Data sets 
 
