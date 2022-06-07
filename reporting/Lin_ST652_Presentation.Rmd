@@ -111,7 +111,7 @@ where $\tau$ is a smoothing ("precision") parameter and $Q = diag(A1) - A$ is a 
 
 Note. A SGLMM  
 
-1. can be reformatted by replacing GMRF with GP (Gaussian process) for point-referenced data (or geostatistical) data. 
+1. can be reformatted by replacing GMRF with GP (Gaussian process) for point-referenced (or geostatistical) data. 
 
 2. is restricted to a Bayesian or restricted maximum likelihood (REML) analysis since the prior (2) is improper. 
 
@@ -275,6 +275,25 @@ SGLMMs are fitted using Metropolis-Hastings random walk and/or Gibbs updates.
 - For all three types of data, $\tau$ is a Gibbs update irrespective of the response distribution. 
 
 
+## Simulated application: Metropolis-Hastings random walk
+
+For example, `sparse.sglmm.fit.binomial()`: 
+
+1. Initialize $\beta$, $\delta_S$ and $\tau$ (precision parameter)
+
+2. Input $Y$, $X$, $M$, etc. and obtain $\hat{V}$ estimated asymptotic covariance matrix from a `glm` fit 
+
+3. Update 
+    - $\beta^{(j+1)} \sim N (\beta^{(j)}, \hat{V})$
+    - $\delta_S^{(j)}$
+    - $\eta^{(j+1)} (= g(\cdot)^{(j+1)}) = X\beta^{(j+1)} + M\delta_S^{(j)}$
+    - $\eta^{(j)} (= g(\cdot)^{(j)}) = X\beta^{(j)} + M\delta_S^{(j)}$
+    - Construct the log-likelihood: $y^T \log(\hat{y}) + {(1 - y)}^T \log(1 - \hat{y}) + \cdots$ for $j+1$ and $j$, where $\hat{y} = g^{-1}(\eta)$ 
+    - Take ratio of the likelihood (or difference of the log-likelihood) for $j+1$ and $j$ and set it to $\alpha$ acceptance ratio 
+
+4. Generate $u \sim Unif(0,1)$ and if $u \leq \alpha$, then accept it as the next step $j+1$ and update $\delta_S$ and $\tau$. Otherwise, stay at the current step $j$. 
+    
+
 ## Simulated application: Data sets 
 
 - Binary data: 
@@ -329,7 +348,7 @@ where
 
 ## Application
 
-Results show that some estimates (e.g. `low_weight`, `gini`) differ from the results from the original study. The process of fitting the model takes approximately $52.47736$ mins. 
+Results show that some estimates (e.g. `low_weight`, `gini`) differ from the results from the original study. The process of fitting the model takes approximately $52.47736$ minutes. 
 
 ```{}
 Coefficients:
