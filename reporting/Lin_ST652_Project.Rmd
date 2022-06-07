@@ -41,7 +41,7 @@ p(W|\tau) \propto \tau^{rank(Q)/2} \exp(- \frac{\tau} {2} W^T Q W), \tag{2}
 $$
 where $\tau$ is a smoothing (or precision) parameter and $Q (= Q(\tau)) = diag(A1) - A$ is a precision matrix. The precision matrix $Q$ is the matrix inverse of the covariance matrix $\Sigma$ (i.e., $Q = \Sigma^{-1}$), the precision parameter is the inverse of the variance parameter ($\tau = 1/ \sigma^2$), and $A$ is an adjacency matrix. The precision matrix $Q$ incorporates both dependence and prior uncertainty. That is, $W_i$ and $W_j,$ $i \neq j,$ are independent given their neighbors $iff$ $Q_{ij} = Q_{ji} = 0$ $iff$ $(i,j) \notin E$. Uncertainty about $W_i$ is inversely proportional to the degree of vertex $i$ ($Q_{ii} = A_i1,$ where $A_i$ is the $i$th row of $A$). 
 
-For spatial data over a continuous domain, i.e. point-referenced data or geostatistical data, a SGLMM can be formulated by replacing the GMRF with a GP (Gaussian process, Diggle et al., 1998; De Oliveira, 2000; Christensen & Waagepetersen, 2002). 
+For spatial data over a continuous domain, i.e. point-referenced or geostatistical data, a SGLMM can be formulated by replacing the GMRF with a GP (Gaussian process, Diggle et al., 1998; De Oliveira, 2000; Christensen & Waagepetersen, 2002). 
 
 Since prior (2) is improper ($Q$ is singular), the SGLMM is restricted to a Bayesian or restricted maximum likelihood (REML) analysis. In contrast, the models in Section 3 and 4 have invertible precision matrices, so both classical and Bayesian analyses can be considered, but Bayesian terminology are used throughout the paper. 
 
@@ -207,7 +207,7 @@ E(deaths_i | \beta, \delta_S) = birth_{Si} \exp(\beta_0 + \beta_1 low_i + \beta_
 $$
 where death is the number of infant deaths, births is the number of live births, low is the rate of low birth weight, black is the percentage of black residents according to the 2000 US census, hisp is the percentage of Hispanic residents (2000 US census), gini is the Gini coefficient which measures income inequality, aff is a score of social affluence and stab is residential stability. 
 
-Results show that some estimates (e.g. `low_weight`, `gini`) differ from the result from the original study. The process of fitting the model takes approximately $52.47736$ mins. 
+Results show that some estimates (e.g. `low_weight`, `gini`) differ from the result from the original study. The process of fitting the sparse model takes approximately $52.47736$ minutes (The RHZ model would take about 4-14 days). 
 ```{}
 Coefficients:
 
