@@ -126,16 +126,17 @@ where
 
 - $g$ is a (canonical) link function, 
 
+- $Z_{-i}$ is the field excluding the $i$th observation, 
+
 - **$\eta$ is the dependence parameter ($\eta > 0$ implies attraction; $\eta < 0$ implies repulsion), and** 
 
-- **$Z_{-i}$ is the field excluding the $i$th observation.**
-
+- **$\sum Z^*_j$ is the autocovariate.** 
 
 ## Spatial confounding (via the automodel)
 
-- For the centered automodel, $Z^*_j = Z_j - \mu_j$, where $\mu_j$ is the independence expectation of $Z_j$ (i.e. $\mu_j = E(Z_j | \beta, \eta = 0) = g^{-1} (X_j \beta)$). 
+- For the centered automodel, **$Z^*_j = Z_j - \mu_j$**, where $\mu_j$ is the independence expectation of $Z_j$ (i.e. $\mu_j = E(Z_j | \beta, \eta = 0) = g^{-1} (X_j \beta)$). 
 
-- For the uncentered automodel, $Z^*_j = Z_j$. 
+- For the uncentered automodel, **$Z^*_j = Z_j$**. 
 
 The sum term $\sum_{(i,j) \in E} Z^*_j$ is called the autocovariate, and it is considered as a synthetic predictor. 
 
