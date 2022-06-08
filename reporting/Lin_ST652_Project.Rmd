@@ -90,7 +90,7 @@ The traditional SGLMM and RHZ model both share very similar approach to that of 
 
 ## 4. Sparse reparameterization of the areal SGLMM
 
-The RHZ model does not allow parsimonious fitting of the residual clustering. Because the corresponding geometry of the projection $P^{\bot}$ fails to account for the underlying graph $G$, the RHZ model permits structure of negative spatial dependence (i.e. repulsion) in the random effects. However, neighboring observation tends to be similar, rather than dissimilar, so patterns of attraction are more useful in practice. The proposed reparameterized model considers an alternative projection that captures the geometry of the models, thus allowing models with only patterns of positive spatial dependence (i.e. attraction). Utilizing the geometry of the models also leads to dimension reduction of the random effects naturally. 
+The RHZ model does not allow parsimonious fitting of the residual clustering. Because the corresponding geometry of the projection $P^{\bot}$ does not account for the underlying graph $G$, the RHZ model permits structure of negative spatial dependence (i.e. repulsion) in the random effects. However, neighboring observation tends to be similar, rather than dissimilar, so patterns of attraction are more useful in practice. The proposed reparameterized model considers an alternative projection that captures the geometry of the models, thus allowing models with only patterns of positive spatial dependence (i.e. attraction). Utilizing the geometry of the models also leads to dimension reduction of the random effects naturally. 
 
 ### The reparameterized model
 
@@ -228,7 +228,7 @@ Number of iterations: 1000000
 
 ## 8. Discussion 
 
-(1) The sparse SGLMM not only alleviates spatial confounding but also accounts for the underlying graph while achieving dimension reduction naturally. However, due to time constraint, some of the computational details are not well explored in this project. For example, the choice of operators, the choice of priors, MCMC methods and its variants as well as the `C++` code and `parallel` package used in the package `ngspatial` to enable efficient computation can be explored further. 
+(1) The sparse SGLMM not only alleviates spatial confounding but also accounts for the underlying graph while achieving dimension reduction naturally. Due to time constraint, some of the computational details are not well explored in this project. For example, the choice of operators, the choice of priors, MCMC methods and its variants as well as the `C++` code and `parallel` package used in the package `ngspatial` to enable efficient computation can be explored further. 
 
 (2) The sparse SGLMM appear faster, compared to the traditional SGLMM or the RHZ model. However, MCMC methods may still take hours or days to run. INLA algorithm (a project that I am currently working on for the Bayesian Statistics course) is a fast alternative for fitting areal and more models and can be accessed through the **R** package `R-INLA`. It would be interesting to see comparisons of accuracy and speed. 
 
