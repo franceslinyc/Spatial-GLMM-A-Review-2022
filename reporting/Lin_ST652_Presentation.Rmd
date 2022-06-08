@@ -290,21 +290,23 @@ SGLMMs are fitted using Metropolis-Hastings random walk and/or Gibbs updates.
 
 ## Simulated application: Metropolis-Hastings random walk
 
-For example, `sparse.sglmm.fit.binomial()`: 
+The function `sparse.sglmm.fit.binomial()`, for example: 
 
-1. Initialize $\beta$, $\delta_S$ and $\tau$ (precision parameter)
+1. Input $Y$, $X$, $M$, etc. and obtain $\hat{V}$ from a `glm` fit 
 
-2. Input $Y$, $X$, $M$, etc. and obtain $\hat{V}$ estimated asymptotic covariance matrix from a `glm` fit 
+2. Initialize $\beta$, $\delta_S$, etc. 
 
-3. Update 
-    - $\beta^{(j+1)} \sim N (\beta^{(j)}, \hat{V})$
-    - $\delta_S^{(j)}$
+3. For $i = 1,...,n\_\text{iteration}$, repeat the following steps: 
+    - Draw/update $\beta^{(j+1)} \sim N (\beta^{(j)}, \hat{V})$
     - $\eta^{(j+1)} (= g(\cdot)^{(j+1)}) = X\beta^{(j+1)} + M\delta_S^{(j)}$
     - $\eta^{(j)} (= g(\cdot)^{(j)}) = X\beta^{(j)} + M\delta_S^{(j)}$
-    - Construct the log-likelihood: $y^T \log(\hat{y}) + {(1 - y)}^T \log(1 - \hat{y}) + \cdots$ for $j+1$ and $j$, where $\hat{y} = g^{-1}(\eta)$ 
-    - Take difference of the log-likelihood (ratio of the likelihood) for $j+1$ and $j$ and set it to $\alpha$ acceptance ratio 
-
-4. Generate $u \sim Unif(0,1)$ and if $\log(u) \leq \alpha$, then accept it as the next step $j+1$ and update $\beta$, $\delta_S$ and repeat and if..., then accept and update $\delta_S$ and $\tau$. Otherwise, stay at the current step $j$. (Nested if-else is required.) 
+    - Construct the log-likelihood for $j+1$ and $j$: $y^T \log(\hat{y}) + {(1 - y)}^T \log(1 - \hat{y}) + \cdots$, where $\hat{y} = g^{-1}(\eta)$ 
+    - Compute $\log(\alpha)$ the acceptance "log"-ratio by taking the difference of the log-likelihood (the ratio of the likelihood) 
+    - Generate $u \sim Unif(0,1)$: 
+      - If $u \leq \alpha$, then accept $j+1$ as the next step and update $\beta^{(j+1)}$ to $\beta^{(j)}$, draw $\delta_S^{(j+1)}$, get $\eta^{(j+1)}$ and $\eta^{(j)}$ but/while keeping $\beta^{(j)}$, compute $\log(\alpha)$, etc.: **If... Else...**
+      - Else, stay at the current step $j$. 
+      
+Note. (1) Nested if-else appears to be involved. (2) $\tau$ is updated in the process too but is omitted here. 
 
 ## Simulated application: Data sets 
 
@@ -322,26 +324,26 @@ For example, `sparse.sglmm.fit.binomial()`:
   (2) simulating observations according to $Z | \delta_S \sim N(\mu = x + y + M\delta_S, \sigma^2 I)$, where $\sigma^2 = 1$. 
 
 
-## Simulated application: Binary data 
+## Simulated application: Binary results
 
 - Binary data: The RHZ and sparse models perform comparably and reliably. The traditional SGLMM, in contrast, not only gives poor estimate but also results in wider CIs. 
 
 ![](../results/Figure4.png){height=75%, width=75%}
 
-## Simulated application: Count data 
+## Simulated application: Count results
 
 - Count data: The traditional SGLMM gives good estimate but again results in wider CIs.
 
 ![](../results/Figure8.png){height=75%, width=75%}
 
-## Simulated application: Normal data 
+## Simulated application: Normal results
 
 - Normal data: The RHZ and sparse models result in narrower CIs because non-spatial model overestimates $\sigma^2$. The traditional SGLMM gives poor estimate and causes variance inflation so large that it causes a type II error. 
 
 ![](../results/Figure9.png){height=75%, width=75%}
 
 
-## Application: the `infant` mortality data
+## Application: The `infant` mortality data
 
 The `infant` data set contains infant mortality rate for $n = 3071$ US counties. 
 
@@ -358,7 +360,7 @@ where
   - death is the number of infant deaths, births is the number of live births, low is the rate of low birth weight, black is the percentage of black residents (2000 US census), hisp is the percentage of Hispanic residents (2000 US census), gini is the Gini coefficient which measures income inequality, aff is a score of social affluence and stab is residential stability. 
 
 
-## Application: the `infant` mortality data
+## Application: The `infant` mortality data
 
 Results show that some estimates (e.g. `low_weight`, `gini`) differ from the results from the original study. The process of fitting the model takes approximately $52.47736$ minutes. 
 
