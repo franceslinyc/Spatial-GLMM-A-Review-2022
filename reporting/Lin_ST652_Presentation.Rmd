@@ -126,9 +126,9 @@ where
 
 - $g$ is a (canonical) link function, 
 
-- $\eta$ is the dependence parameter ($\eta > 0$ implies attraction; $\eta < 0$ implies repulsion), and 
+- **$\eta$ is the dependence parameter ($\eta > 0$ implies attraction; $\eta < 0$ implies repulsion), and** 
 
-- $Z_{-i}$ is the field excluding the $i$th observation.
+- **$Z_{-i}$ is the field excluding the $i$th observation.**
 
 
 ## Spatial confounding (via the automodel)
@@ -178,7 +178,7 @@ where $Q_R = L^T Q L$.
 
 However, the RHZ model does not allow parsimonious fitting of the residual clustering. 
 
-- The geometry corresponding to the projection $P^{\bot}$ fails to account for the underlying graph $G$, thus permitting structure of negative spatial dependence (i.e. repulsion) in the random effects. 
+- That is, the geometry corresponding to the projection $P^{\bot}$ does not account for the underlying graph $G$, thus permitting structure of negative spatial dependence (i.e. repulsion) in the random effects. 
 
 - This is not useful in practice since neighboring observation tends to be similar, rather than dissimilar. 
 
@@ -246,20 +246,33 @@ tb_1 %>% pandoc.table(caption = "Comparision of various SGLMMs") %>% pander
 
 ## Dimension reduction for spatial models
 
-- An areal mixed model: Metropolis-Hastings algorithm for sampling from the posterior distribution of the field of random effects $W$ is slow when components of $W$ exhibit strong *a posteriori* dependence. Various methods such as MCMC block sampler have been proposed. 
+- Areal mixed model: 
 
-- The random effects for the RHZ and the sparse models, in contrast, are *a posteriori* uncorrelated. 
+  - Metropolis-Hastings algorithm for sampling from the posterior distribution of $W$ (random effects) is slow, when components of $W$ exhibit strong *a posteriori* dependence. 
+  - Various methods such as MCMC block sampler have been proposed.  
 
-- The RHZ model: Time complexity of the operation is in $\mathcal{O}(n^2)$, which is still significant enough to discourage or prevent application of the model to large data sets. 
+- The random effects for the RHZ and sparse model, in contrast, are *a posteriori* uncorrelated. 
 
-- The sparse model: Evaluation of the quadratic form $\delta_S^TQ_S\delta_S$ can be $\mathcal{O}(1)$, which makes the model more suitable for large-scale data sets. (Recall that taking full advantage of $G$ reduces the $dim$ of random effects.)
+- RHZ model: However, time complexity of the operation is in $\mathcal{O}(n^2)$, which is still significant enough to discourage or prevent application of the model to large data sets. 
+
+- Sparse model: Evaluation of the quadratic form $\delta_S^TQ_S\delta_S$ can be $\mathcal{O}(1)$, which makes the model more suitable for large-scale data sets. (Recall that taking full advantage of $G$ reduces the $dim$ of random effects.)
 
 
 ## Simulated application 
 
 The section is kept as a brief summary, and the figures are obtained from the paper. 
 
-Five models (e.g. a non-spatial ordinary linear model, the centered autologistic, the traditional SGLMM, the RHZ model and the sparse model) are fitted for the simulated binary, count and normal data. 
+Five models (e.g. 
+
+1. a non-spatial ordinary linear model, 
+2. the centered autologistic, 
+3. the traditional SGLMM, 
+4. the RHZ model and 
+5. the sparse model) 
+
+are fitted for the simulated 
+
+- binary, count and normal data. 
 
 
 ## Simulated application: Algorithms 
@@ -309,26 +322,26 @@ For example, `sparse.sglmm.fit.binomial()`:
   (2) simulating observations according to $Z | \delta_S \sim N(\mu = x + y + M\delta_S, \sigma^2 I)$, where $\sigma^2 = 1$. 
 
 
-## Simulated application 
+## Simulated application: Binary data 
 
 - Binary data: The RHZ and sparse models perform comparably and reliably. The traditional SGLMM, in contrast, not only gives poor estimate but also results in wider CIs. 
 
 ![](../results/Figure4.png){height=75%, width=75%}
 
-## Simulated application 
+## Simulated application: Count data 
 
 - Count data: The traditional SGLMM gives good estimate but again results in wider CIs.
 
 ![](../results/Figure8.png){height=75%, width=75%}
 
-## Simulated application 
+## Simulated application: Normal data 
 
 - Normal data: The RHZ and sparse models result in narrower CIs because non-spatial model overestimates $\sigma^2$. The traditional SGLMM gives poor estimate and causes variance inflation so large that it causes a type II error. 
 
 ![](../results/Figure9.png){height=75%, width=75%}
 
 
-## Application
+## Application: the `infant` mortality data
 
 The `infant` data set contains infant mortality rate for $n = 3071$ US counties. 
 
@@ -345,7 +358,7 @@ where
   - death is the number of infant deaths, births is the number of live births, low is the rate of low birth weight, black is the percentage of black residents (2000 US census), hisp is the percentage of Hispanic residents (2000 US census), gini is the Gini coefficient which measures income inequality, aff is a score of social affluence and stab is residential stability. 
 
 
-## Application
+## Application: the `infant` mortality data
 
 Results show that some estimates (e.g. `low_weight`, `gini`) differ from the results from the original study. The process of fitting the model takes approximately $52.47736$ minutes. 
 
@@ -371,7 +384,7 @@ Number of iterations: 1000000
 
 (1) The sparse SGLMM not only alleviates spatial confounding but also accounts for the underlying graph while achieving dimension reduction naturally. 
 
-- However, due to time constraint, some of the computational details are not well explored in this project (e.g. the choice of operators, the choice of priors, MCMC methods and its variants as well as the `C++` code used in the package). 
+- Due to time constraint, some of the computational details are not well explored in this project (e.g. the choice of operators, the choice of priors, MCMC methods and its variants as well as the `C++` code used in the package). 
 
 
 ## Discussion 
