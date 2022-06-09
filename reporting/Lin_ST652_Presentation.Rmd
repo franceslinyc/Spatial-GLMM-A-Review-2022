@@ -307,7 +307,7 @@ The function `sparse.sglmm.fit.binomial()`, for example:
     (6) If $u \sim Unif(0,1) \leq \alpha$, then accept $j+1$ as the next step and set $\beta^{(j)} \leftarrow \beta^{(j+1)}$ 
     (7) Repeat (1)-(6) but for $\delta_S$ 
     (8) Draw/update $\tau$ using Gibbs update (*Always* accept) 
-    - Else, stay at the current step $j$ for $\beta$, $\delta_S$, $\tau$ 
+    - For $\beta$ and $\delta_S$: Else, stay at the current step $j$  
 
 
 ## Simulated application: Data sets 
