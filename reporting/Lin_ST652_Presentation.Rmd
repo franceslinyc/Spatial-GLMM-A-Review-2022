@@ -132,6 +132,7 @@ where
 
 - **$\sum Z^*_j$ is the autocovariate.** 
 
+
 ## Spatial confounding (via the automodel)
 
 - For the centered automodel, **$Z^*_j = Z_j - \mu_j$**, where $\mu_j$ is the independence expectation of $Z_j$ (i.e. $\mu_j = E(Z_j | \beta, \eta = 0) = g^{-1} (X_j \beta)$). 
@@ -289,25 +290,25 @@ SGLMMs are fitted using Metropolis-Hastings random walk and/or Gibbs updates.
 - For all three types of data, $\tau$ is a Gibbs update irrespective of the response distribution. 
 
 
-## Simulated application: Metropolis-Hastings random walk
+## Simulated application: Gibbs sampler
 
 The function `sparse.sglmm.fit.binomial()`, for example: 
 
 1. Input $Y$, $X$, $M$, etc. and obtain $\hat{V}$ from a `glm` fit 
 
-2. Initialize $\beta$, $\delta_S$, etc. 
+2. Initialize $\beta$, $\delta_S$, $\tau$, etc. 
 
 3. For $i = 1,...,n\_\text{iteration}$, repeat the following steps: 
-    - Draw/update $\beta^{(j+1)} \sim N (\beta^{(j)}, \hat{V})$
-    - $\eta^{(j+1)} (= g(\cdot)^{(j+1)}) = X\beta^{(j+1)} + M\delta_S^{(j)}$
-    - $\eta^{(j)} (= g(\cdot)^{(j)}) = X\beta^{(j)} + M\delta_S^{(j)}$
-    - Construct the log-likelihood for $j+1$ and $j$: $y^T \log(\hat{y}) + {(1 - y)}^T \log(1 - \hat{y}) + \cdots$, where $\hat{y} = g^{-1}(\eta)$ 
-    - Compute $\log(\alpha)$ the acceptance "log"-ratio by taking the difference of the log-likelihood (the ratio of the likelihood) 
-    - Generate $u \sim Unif(0,1)$: 
-      - If $u \leq \alpha$, then accept $j+1$ as the next step and update $\beta^{(j+1)}$ to $\beta^{(j)}$, draw $\delta_S^{(j+1)}$, get $\eta^{(j+1)}$ and $\eta^{(j)}$ but/while keeping $\beta^{(j)}$, compute $\log(\alpha)$, etc.: **If... Else...**
-      - Else, stay at the current step $j$. 
-      
-Note. (1) Nested if-else appears to be involved. (2) $\tau$ is updated in the process too but is omitted here. 
+    (1) Draw/update $\beta^{(j+1)} \sim N (\beta^{(j)}, \hat{V})$
+    (2) $\eta^{(j+1)} (= g(\cdot)^{(j+1)}) = X\beta^{(j+1)} + M\delta_S^{(j)}$
+    (3) $\eta^{(j)} (= g(\cdot)^{(j)}) = X\beta^{(j)} + M\delta_S^{(j)}$
+    (4) Construct the log-likelihood for $j+1$ and $j$: $y^T \log(\hat{y}) + {(1 - y)}^T \log(1 - \hat{y}) + \cdots$, where $\hat{y} = g^{-1}(\eta)$ 
+    (5) Compute $\log(\alpha)$ the acceptance "log"-ratio by taking the difference of the log-likelihood (the ratio of the likelihood) 
+    (6) If $u \sim Unif(0,1) \leq \alpha$, then accept $j+1$ as the next step and set $\beta^{(j)} \leftarrow \beta^{(j+1)}$ 
+    (7) Repeat (1)-(6) but for $\delta_S$ 
+    (8) Draw/update $\tau$ using Gibbs update (*Always* accept) 
+    - Else, stay at the current step $j$ for $\beta$, $\delta_S$, $\tau$ 
+
 
 ## Simulated application: Data sets 
 
